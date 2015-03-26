@@ -23,14 +23,13 @@ public:
         : addr(0), port(0)
     {}
 
-    void begin(uint32_t a, uint16_t p) {
-        port = p;
+    void begin(const char* a, uint16_t p) {
         addr = a;
+        port = p;
     }
 
     bool connect() {
-        uint8_t* a = (uint8_t*)&addr;
-        BLYNK_LOG("Connecting to %d.%d.%d.%d:%d", a[3], a[2], a[1], a[0], port);
+        BLYNK_LOG("Connecting to %s:%d", addr, port);
         return 1 == client.connect(addr, port);
     }
 
@@ -58,7 +57,7 @@ public:
 
 private:
     TCPClient   client;
-    uint32_t    addr;
+    const char* addr;
     uint16_t    port;
 };
 
