@@ -31,21 +31,33 @@ public:
     bool connect() {
         uint8_t* a = (uint8_t*)&addr;
         BLYNK_LOG("Connecting to %d.%d.%d.%d:%d", a[3], a[2], a[1], a[0], port);
-
+        return 1 == client.connect(addr, port);
     }
 
-    void disconnect() { }
+    void disconnect() { client.stop(); }
 
     size_t read(void* buf, size_t len) {
+        char* beg = (char*)buf;
+        char* end = beg + len;
+        while (beg < end) {
+            int c = client.read();
+            if (c < 0)
+                break;
+            *beg++ = (char)c;
+        }
+        return len;
     }
+    
     size_t write(const void* buf, size_t len) {
+        return client.write((const uint8_t*)buf, len);
     }
 
-    void flush() {  }
-    bool connected() {  }
-    int available() {  }
+    void flush() { client.stop(); }
+    bool connected() { return client.connected(); }
+    int available() { return client.available(); }
 
 private:
+    TCPClient   client;
     uint32_t    addr;
     uint16_t    port;
 };
