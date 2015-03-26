@@ -13,7 +13,7 @@
 
 #include "BlynkSparkCore.h"
 
-static BlynkTransportSparkCore _blynkTransport();
+static BlynkTransportSparkCore _blynkTransport;
 BlynkSparkCore Blynk(_blynkTransport);
 
 #include "BlynkWidgets.h"
