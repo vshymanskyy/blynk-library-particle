@@ -45,10 +45,12 @@ void BlynkFatal() BLYNK_NORETURN;
 
 #ifdef BLYNK_PRINT
 
-    #if defined(ARDUINO)
+    #if defined(ARDUINO) || defined(SPARK)
         #include <stdio.h>
         #include <stdarg.h>
+#if defined(ARDUINO)
         #include <Arduino.h>
+#endif
 
         #define BLYNK_DBG_DUMP(msg, addr, len) { BLYNK_PRINT.print(msg); BLYNK_PRINT.write((uint8_t*)addr, len); BLYNK_PRINT.println(); }
         #define BLYNK_DBG_BREAK()    { for(;;); }
