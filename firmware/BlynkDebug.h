@@ -97,6 +97,7 @@ void BlynkFatal() BLYNK_NORETURN;
         #include <windows.h>
         #include <stdio.h>
 
+        #define BLYNK_DBG_DUMP(msg, addr, len)
         #define BLYNK_DBG_BREAK()    DebugBreak();
         #define BLYNK_LOG(...)       { char buff[1024]; snprintf(buff, sizeof(buff), __VA_ARGS__); OutputDebugString(buff); }
         #define BLYNK_ASSERT(expr)   { if(!(expr)) { BLYNK_DBG_BREAK() } }
@@ -104,6 +105,7 @@ void BlynkFatal() BLYNK_NORETURN;
     #else
 
         #warning Could not detect platform
+        #define BLYNK_DBG_DUMP(msg, addr, len)
         #define BLYNK_DBG_BREAK()    { *(char*)(NULL) = 0xFF; } // SEGV!!!
         #define BLYNK_LOG(...)
         #define BLYNK_ASSERT(expr)   { if(!(expr)) { BLYNK_DBG_BREAK() } }
