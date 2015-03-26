@@ -75,6 +75,7 @@ public:
                 uint16_t port      = BLYNK_DEFAULT_PORT)
     {
         Base::begin(auth);
+        this->conn.begin(domain, port);
     }
 
     void begin( const char* auth,
