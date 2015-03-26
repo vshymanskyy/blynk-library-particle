@@ -1,5 +1,5 @@
 /**
- * @file       BlynkApiArduino.h
+ * @file       BlynkApiSparkCore.h
  * @author     Volodymyr Shymanskyy
  * @license    This project is released under the MIT License (MIT)
  * @copyright  Copyright (c) 2015 Volodymyr Shymanskyy
@@ -8,30 +8,14 @@
  *
  */
 
-#ifndef BlynkApiArduino_h
-#define BlynkApiArduino_h
+#ifndef BlynkApiSparkCore_h
+#define BlynkApiSparkCore_h
 
 #include <Blynk/BlynkApi.h>
-#include <Arduino.h>
-
-#if   defined(__AVR_ATmega168__)
-    #define BLYNK_INFO_CPU      "ATmega168"
-#elif defined(__AVR_ATmega328P__)
-    #define BLYNK_INFO_CPU      "ATmega328P"
-#elif defined(__AVR_ATmega1280__)
-    #define BLYNK_INFO_CPU      "ATmega1280"
-#elif defined(__AVR_ATmega1284__)
-    #define BLYNK_INFO_CPU      "ATmega1284"
-#elif defined(__AVR_ATmega2560__)
-    #define BLYNK_INFO_CPU      "ATmega2560"
-#elif defined(__AVR_ATmega32U4__)
-    #define BLYNK_INFO_CPU      "ATmega32U4"
-#elif defined(__SAM3X8E__)
-    #define BLYNK_INFO_CPU      "AT91SAM3X8E"
-#endif
+#include "application.h"
 
 #ifndef BLYNK_INFO_DEVICE
-    #define BLYNK_INFO_DEVICE  "Arduino"
+    #define BLYNK_INFO_DEVICE  "Spark Core"
 #endif
 
 template<class Proto>

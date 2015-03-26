@@ -1,5 +1,5 @@
 /**
- * @file       BlynkSimpleWildFire.h
+ * @file       BlynkSimpleSparkCore.h
  * @author     Volodymyr Shymanskyy
  * @license    This project is released under the MIT License (MIT)
  * @copyright  Copyright (c) 2015 Volodymyr Shymanskyy
@@ -8,14 +8,13 @@
  *
  */
 
-#ifndef BlynkSimpleWildFire_h
-#define BlynkSimpleWildFire_h
+#ifndef BlynkSimpleSparkCore_h
+#define BlynkSimpleSparkCore_h
 
-#include <Adapters/BlynkWildFire.h>
+#include <Adapters/BlynkSparkCore.h>
 
-WildFire_CC3000 cc3000;
-static BlynkTransportWildFire _blynkTransport(cc3000);
-BlynkWildFire Blynk(cc3000, _blynkTransport);
+static BlynkTransportSparkCore _blynkTransport();
+BlynkSparkCore Blynk(_blynkTransport);
 
 #include <BlynkWidgets.h>
 
