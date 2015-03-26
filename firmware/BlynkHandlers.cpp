@@ -7,9 +7,9 @@
  * @brief      Debug utilities for Arduino
  */
 
-#include <Blynk/BlynkConfig.h>
-#include <Blynk/BlynkHandlers.h>
-#include <Blynk/BlynkDebug.h>
+#include "BlynkConfig.h"
+#include "BlynkHandlers.h"
+#include "BlynkDebug.h"
 
 __attribute__((weak))
 void BlynkWidgetRead(BlynkReq& request)

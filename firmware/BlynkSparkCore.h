@@ -13,8 +13,8 @@
 
 #define BLYNK_INFO_CONNECTION "CC3000"
 
-#include <blynk/BlynkApiArduino.h>
-#include <blynk/Blynk/BlynkProtocol.h>
+#include "BlynkApiSparkCore.h"
+#include "BlynkProtocol.h"
 
 class BlynkTransportSparkCore
 {

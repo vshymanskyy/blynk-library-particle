@@ -11,7 +11,7 @@
 #ifndef BlynkDebug_h
 #define BlynkDebug_h
 
-#include <Blynk/BlynkConfig.h>
+#include "BlynkConfig.h"
 #include <stddef.h>
 
 // General defines

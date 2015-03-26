@@ -8,7 +8,7 @@
  *
  */
 
-#include <Blynk/BlynkParam.h>
+#include "BlynkParam.h"
 
 BlynkParam::iterator BlynkParam::operator[](int index) const
 {

@@ -11,11 +11,11 @@
 #ifndef BlynkSimpleSparkCore_h
 #define BlynkSimpleSparkCore_h
 
-#include <Adapters/BlynkSparkCore.h>
+#include "BlynkSparkCore.h"
 
 static BlynkTransportSparkCore _blynkTransport();
 BlynkSparkCore Blynk(_blynkTransport);
 
-#include <BlynkWidgets.h>
+#include "BlynkWidgets.h"
 
 #endif

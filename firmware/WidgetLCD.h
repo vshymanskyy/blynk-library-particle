@@ -10,7 +10,7 @@
 #ifndef WidgetLCD_h
 #define WidgetLCD_h
 
-#include <Blynk/BlynkApi.h>
+#include "BlynkApi.h"
 
 class WidgetLCD
 {

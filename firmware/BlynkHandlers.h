@@ -11,8 +11,8 @@
 #ifndef BlynkHandlers_h
 #define BlynkHandlers_h
 
-#include <Blynk/BlynkConfig.h>
-#include <Blynk/BlynkParam.h>
+#include "BlynkConfig.h"
+#include "BlynkParam.h"
 
 struct BlynkReq
 {

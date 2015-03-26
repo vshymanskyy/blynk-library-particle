@@ -11,7 +11,7 @@
 #define WidgetConsole_h
 
 #include <Print.h>
-#include <Blynk/BlynkApi.h>
+#include "BlynkApi.h"
 
 class WidgetConsole
     : public Print

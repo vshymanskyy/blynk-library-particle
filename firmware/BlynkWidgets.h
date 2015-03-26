@@ -7,6 +7,6 @@
  * @brief
  */
 
-#include <WidgetLCD.h>
-#include <WidgetConsole.h>
+#include "WidgetLCD.h"
+#include "WidgetConsole.h"
 // Cannot auto-include WidgetSD, as it has library dependency

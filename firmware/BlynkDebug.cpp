@@ -6,8 +6,7 @@
  * @date       Jan 2015
  * @brief      Debug utilities for Arduino
  */
-#include "BlynkApiSparkCore.h"
-#include "Blynk/BlynkDebug.h"
+#include "BlynkDebug.h"
 
 size_t BlynkFreeRam()
 {
