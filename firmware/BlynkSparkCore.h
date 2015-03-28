@@ -38,7 +38,7 @@ public:
         if (domain) {
             BLYNK_LOG("Connecting to %s:%d", domain, port);
             return (1 == client.connect(domain, port));
-        } else if (addr) {
+        } else {
             BLYNK_LOG("Connecting to %d.%d.%d.%d:%d", addr[0], addr[1], addr[2], addr[3], port);
             return (1 == client.connect(addr, port));
         }
