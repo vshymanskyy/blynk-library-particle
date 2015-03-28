@@ -23,41 +23,46 @@ public:
         : addr(0), port(0)
     {}
 
-    void begin(const char* a, uint16_t p) {
+    void begin(IPAddress a, uint16_t p) {
+        domain = NULL;
+        port = p;
         addr = a;
+    }
+
+    void begin(const char* d, uint16_t p) {
+        domain = d;
         port = p;
     }
 
     bool connect() {
-        BLYNK_LOG("Connecting to %s:%d", addr, port);
-        return 1 == client.connect(addr, port);
+        if (domain) {
+            BLYNK_LOG("Connecting to %s:%d", domain, port);
+            return (1 == client.connect(domain, port));
+        } else if (addr) {
+            BLYNK_LOG("Connecting to %d.%d.%d.%d:%d", addr[0], addr[1], addr[2], addr[3], port);
+            return (1 == client.connect(addr, port));
+        }
+        return 0;
     }
 
     void disconnect() { client.stop(); }
 
     size_t read(void* buf, size_t len) {
-        char* beg = (char*)buf;
-        char* end = beg + len;
-        while (beg < end) {
-            int c = client.read();
-            if (c < 0)
-                break;
-            *beg++ = (char)c;
-        }
-        return len;
+        return client.readBytes((char*)buf, len);
     }
     
     size_t write(const void* buf, size_t len) {
         return client.write((const uint8_t*)buf, len);
     }
 
-    void flush() { client.stop(); }
+    void flush() { client.flush(); }
     bool connected() { return client.connected(); }
     int available() { return client.available(); }
 
 private:
     TCPClient   client;
-    const char* addr;
+    IPAddress   addr;
+    const char* domain;
     uint16_t    port;
 };
 
@@ -83,6 +88,7 @@ public:
                 uint16_t port)
     {
         Base::begin(auth);
+        this->conn.begin(addr, port);
     }
 private:
 
