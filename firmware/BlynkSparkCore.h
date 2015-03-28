@@ -20,7 +20,7 @@ class BlynkTransportSparkCore
 {
 public:
     BlynkTransportSparkCore()
-        : addr(0), port(0)
+        : domain(NULL), port(0)
     {}
 
     void begin(IPAddress a, uint16_t p) {
@@ -38,7 +38,7 @@ public:
         if (domain) {
             BLYNK_LOG("Connecting to %s:%d", domain, port);
             return (1 == client.connect(domain, port));
-        } else if (addr) {
+        } else {
             BLYNK_LOG("Connecting to %d.%d.%d.%d:%d", addr[0], addr[1], addr[2], addr[3], port);
             return (1 == client.connect(addr, port));
         }
@@ -80,6 +80,7 @@ public:
                 uint16_t port      = BLYNK_DEFAULT_PORT)
     {
         Base::begin(auth);
+        delay(1000); // Give the board time to settle
         this->conn.begin(domain, port);
     }
 
@@ -88,6 +89,7 @@ public:
                 uint16_t port)
     {
         Base::begin(auth);
+        delay(1000); // Give the board time to settle
         this->conn.begin(addr, port);
     }
 private:
