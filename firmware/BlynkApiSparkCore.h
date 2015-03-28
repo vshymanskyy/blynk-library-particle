@@ -106,6 +106,8 @@ void BlynkApi<Proto>::processCmd(const void* buff, size_t len)
                     pinMode(pin, OUTPUT);
                 } else if (!strcmp(it.asStr(), "pu")) {
                     pinMode(pin, INPUT_PULLUP);
+                } else if (!strcmp(it.asStr(), "pd")) {
+                    pinMode(pin, INPUT_PULLDOWN);
                 } else {
 #ifdef BLYNK_DEBUG
                     BLYNK_LOG("Invalid pinMode %u -> %s", pin, it.asStr());
