@@ -13,8 +13,7 @@
  * This example code is in public domain.
  *
  **************************************************************/
-
-//#define BLYNK_DEBUG
+//#define BLYNK_DEBUG // Uncomment this to see debug prints
 #define BLYNK_PRINT Serial
 #include "blynk/BlynkSimpleSparkCore.h"
 
@@ -24,7 +23,7 @@ char auth[] = "YourAuthToken";
 
 void setup()
 {
-  Serial.begin(9600);
+  Serial.begin();
   Blynk.begin(auth);
 }
 
