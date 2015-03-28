@@ -20,7 +20,7 @@ class BlynkTransportSparkCore
 {
 public:
     BlynkTransportSparkCore()
-        : addr(0), port(0)
+        : domain(NULL), port(0)
     {}
 
     void begin(IPAddress a, uint16_t p) {
