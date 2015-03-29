@@ -27,10 +27,10 @@
     #include <avr/pgmspace.h>
     #define BLYNK_HAS_PROGMEM
     #define BLYNK_PROGMEM PROGMEM
-    #define _S(s) PSTR(s)
+    #define BLYNK_PSTR(s) PSTR(s)
 #else
     #define BLYNK_PROGMEM
-    #define _S(s) s
+    #define BLYNK_PSTR(s) s
 #endif
 
 // Diagnostic defines
@@ -57,7 +57,7 @@ void BlynkFatal() BLYNK_NORETURN;
 #if defined(__SAM3X8E__)
         #define BLYNK_LOG(msg, ...)  blynk_dbg_print(msg, ##__VA_ARGS__)
 #else
-        #define BLYNK_LOG(msg, ...)  blynk_dbg_print(_S(msg), ##__VA_ARGS__)
+        #define BLYNK_LOG(msg, ...)  blynk_dbg_print(BLYNK_PSTR(msg), ##__VA_ARGS__)
 #endif
         #define BLYNK_ASSERT(expr)   { if(!(expr)) { BLYNK_LOG("Assertion %s failed.", #expr); BLYNK_DBG_BREAK() } }
 
