@@ -3,5 +3,5 @@
     "version": "0.1.8",
     "author": "Volodymyr Shymanskyy <vshymanskyi@gmail.com>",
     "license": "MIT",
-    "description": "Blynk is a platform with iOS and Android apps to control Arduino, Raspberry Pi and the likes over the Internet. You can easily build graphic interfaces for all your projects by simply dragging and dropping widgets. http://blynk.cc"
+    "description": "Build a smartphone app for your Spark Core project in minutes. http://blynk.cc"
 }
