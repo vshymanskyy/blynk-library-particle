@@ -10,12 +10,17 @@
 
 size_t BlynkFreeRam()
 {
+    return 0;
 }
 
 void BlynkReset()
 {
+    System.reset();
+    for(;;);
 }
 
 void BlynkFatal()
 {
+    BlynkReset();
+    for(;;);
 }
