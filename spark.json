@@ -1,6 +1,6 @@
 {
     "name": "blynk",
-    "version": "0.1.6",
+    "version": "0.1.7",
     "author": "Volodymyr Shymanskyy <vshymanskyi@gmail.com>",
     "license": "MIT",
     "description": "Integrate your project with the smartphone."

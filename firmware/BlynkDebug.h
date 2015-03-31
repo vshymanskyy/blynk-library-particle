@@ -13,6 +13,17 @@
 
 #include "BlynkConfig.h"
 #include <stddef.h>
+#ifdef ESP8266
+    #include "ets_sys.h"
+    #include "os_type.h"
+    #include "mem.h"
+#else
+    #include <inttypes.h>
+#endif
+
+#if defined(ARDUINO)
+    #include <Arduino.h>
+#endif
 
 // General defines
 
@@ -48,9 +59,6 @@ void BlynkFatal() BLYNK_NORETURN;
     #if defined(ARDUINO) || defined(SPARK)
         #include <stdio.h>
         #include <stdarg.h>
-#if defined(ARDUINO)
-        #include <Arduino.h>
-#endif
 
         #define BLYNK_DBG_DUMP(msg, addr, len) { BLYNK_PRINT.print(msg); BLYNK_PRINT.write((uint8_t*)addr, len); BLYNK_PRINT.println(); }
         #define BLYNK_DBG_BREAK()    { for(;;); }
@@ -100,6 +108,13 @@ void BlynkFatal() BLYNK_NORETURN;
         #define BLYNK_DBG_DUMP(msg, addr, len)
         #define BLYNK_DBG_BREAK()    DebugBreak();
         #define BLYNK_LOG(...)       { char buff[1024]; snprintf(buff, sizeof(buff), __VA_ARGS__); OutputDebugString(buff); }
+        #define BLYNK_ASSERT(expr)   { if(!(expr)) { BLYNK_DBG_BREAK() } }
+
+    #elif defined(ESP8266)
+
+        #define BLYNK_DBG_DUMP(msg, addr, len) { ets_uart_printf(msg); uart0_tx_buffer(addr, len); ets_uart_printf("\n"); }
+        #define BLYNK_DBG_BREAK()    abort()
+        #define BLYNK_LOG(msg, ...)  ets_uart_printf("[%ld] " msg "\n", millis(), ##__VA_ARGS__)
         #define BLYNK_ASSERT(expr)   { if(!(expr)) { BLYNK_DBG_BREAK() } }
 
     #else
