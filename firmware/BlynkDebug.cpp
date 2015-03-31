@@ -7,6 +7,7 @@
  * @brief      Debug utilities for Arduino
  */
 #include "BlynkDebug.h"
+#include "application.h"
 
 size_t BlynkFreeRam()
 {
