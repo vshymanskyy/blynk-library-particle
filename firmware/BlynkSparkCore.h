@@ -80,7 +80,7 @@ public:
                 uint16_t port      = BLYNK_DEFAULT_PORT)
     {
         Base::begin(auth);
-        delay(1000); // Give the board time to settle
+        ::delay(1000); // Give the board time to settle
         this->conn.begin(domain, port);
     }
 
@@ -89,7 +89,7 @@ public:
                 uint16_t port)
     {
         Base::begin(auth);
-        delay(1000); // Give the board time to settle
+        ::delay(1000); // Give the board time to settle
         this->conn.begin(addr, port);
     }
 private:
