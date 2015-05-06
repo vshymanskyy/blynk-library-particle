@@ -22,6 +22,7 @@ void BlynkReset()
 
 void BlynkFatal()
 {
+    BLYNK_LOG("Resetting");
+    delay(100);
     BlynkReset();
-    for(;;);
 }
