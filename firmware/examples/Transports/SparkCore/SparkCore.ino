@@ -24,6 +24,7 @@ char auth[] = "YourAuthToken";
 void setup()
 {
   Serial.begin(9600);
+  delay(10000); // Allow board to settle
   Blynk.begin(auth);
 }
 
