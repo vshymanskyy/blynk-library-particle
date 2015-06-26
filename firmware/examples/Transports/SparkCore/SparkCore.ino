@@ -31,7 +31,7 @@ void setup()
 // Attach a Button widget to the Virtual pin 1 - and send sweet tweets!
 BLYNK_WRITE(1) {
     if (param.asInt()) { // On button down...
-        // Twitting!
+        // Tweeting!
         // Note:
         //   We allow 1 tweet per minute for now.
         //   Twitter doesn't allow identical subsequent messages.
