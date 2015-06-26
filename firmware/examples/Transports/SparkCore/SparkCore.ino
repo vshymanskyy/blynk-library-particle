@@ -35,7 +35,7 @@ BLYNK_WRITE(1) {
         // Note:
         //   We allow 1 tweet per minute for now.
         //   Twitter doesn't allow identical subsequent messages.
-        Blynk.tweet("My Particle project is tweeting using @blynk_app and this is awesome!\n @Particle #IoT #blynk");
+        Blynk.tweet("My Particle project is tweeting using @blynk_app and it’s awesome!\n @Particle #IoT #blynk");
         
         // Pushing notification to the app!
         // Note:
