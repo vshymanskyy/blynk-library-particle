@@ -31,7 +31,16 @@ void setup()
 // Attach a Button widget to the Virtual pin 1 - and send sweet tweets!
 BLYNK_WRITE(1) {
     if (param.asInt()) { // On button down...
+        // Twitting!
+        // Note:
+        //   We allow 1 tweet per minute for now.
+        //   Twitter doesn't allow identical subsequent messages.
         Blynk.tweet("My Particle project is tweeting using @blynk_app and this is awesome!\n @Particle #IoT #blynk");
+        
+        // Pushing notification to the app!
+        // Note:
+        //   We allow 1 notification per minute for now.
+        Blynk.notify("You pressed the button and I know it ;)");
     }
 }
 
