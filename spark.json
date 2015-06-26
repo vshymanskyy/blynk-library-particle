@@ -1,6 +1,6 @@
 {
     "name": "blynk",
-    "version": "0.2.1",
+    "version": "0.2.2-beta",
     "author": "Volodymyr Shymanskyy <vshymanskyi@gmail.com>",
     "license": "MIT",
     "description": "Build a smartphone app for your Spark Core project in minutes. http://blynk.cc"

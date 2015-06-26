@@ -41,7 +41,7 @@ public:
         cmd.add("vw");
         cmd.add(pin);
         cmd.add(data);
-        static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_HARDWARE, 0, cmd.getBuffer(), cmd.getLength());
+        static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_HARDWARE, 0, cmd.getBuffer(), cmd.getLength()-1);
     }
 
     /**
@@ -74,11 +74,12 @@ public:
      *
      * @param msg Text of the message
      */
-    void tweet(const char* msg) {
-        size_t len = strlen(msg);
-        if (len < 140) {
-            static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_TWEET, 0, msg, len+1);
-        }
+    template<typename T>
+    void tweet(const T& data) {
+        char mem[128];
+        BlynkParam cmd(mem, 0, sizeof(mem));
+        cmd.add(data);
+        static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_TWEET, 0, cmd.getBuffer(), cmd.getLength()-1);
     }
 
     /**
@@ -86,8 +87,12 @@ public:
      *
      * @param msg Text of the message
      */
-    void push_notification(const char* msg) {
-        static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_PUSH_NOTIFICATION, 0, msg, strlen(msg)+1);
+    template<typename T>
+    void notify(const T& data) {
+        char mem[128];
+        BlynkParam cmd(mem, 0, sizeof(mem));
+        cmd.add(data);
+        static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_NOTIFY, 0, cmd.getBuffer(), cmd.getLength()-1);
     }
 
     /**
@@ -95,7 +100,7 @@ public:
      * The message is defined in the App
      */
     void email() {
-        static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_EMAIL, 0);
+        static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_EMAIL);
     }
 
     /**
@@ -103,8 +108,12 @@ public:
      *
      * @param msg Text of the message
      */
-    void email(const char* msg) {
-        static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_EMAIL, 0, msg, strlen(msg)+1);
+    template<typename T>
+    void email(const T& data) {
+        char mem[128];
+        BlynkParam cmd(mem, 0, sizeof(mem));
+        cmd.add(data);
+        static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_EMAIL, 0, cmd.getBuffer(), cmd.getLength()-1);
     }
 
     /**
@@ -114,13 +123,14 @@ public:
      * @param subject Subject of message
      * @param msg     Text of the message
      */
-    void email(const char* email, const char* subject, const char* msg) {
+    template <typename T1, typename T2>
+    void email(const char* email, const T1& subject, const T2& msg) {
         char mem[128];
         BlynkParam cmd(mem, 0, sizeof(mem));
         cmd.add(email);
         cmd.add(subject);
         cmd.add(msg);
-        static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_EMAIL, 0, cmd.getBuffer(), cmd.getLength());
+        static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_EMAIL, 0, cmd.getBuffer(), cmd.getLength()-1);
     }
 
 #if defined(BLYNK_EXPERIMENTAL)
@@ -155,7 +165,7 @@ public:
         BlynkParam cmd(mem, 0, sizeof(mem));
         cmd.add("vr");
         cmd.add(pin);
-        static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_HARDWARE, 0, cmd.getBuffer(), cmd.getLength());
+        static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_HARDWARE, 0, cmd.getBuffer(), cmd.getLength()-1);
     }
 
     /**
@@ -167,13 +177,13 @@ public:
      * @param val Value to set
      */
     void digitalWrite(uint8_t pin, uint8_t val) {
-    	::digitalWrite(pin, val);
+        ::digitalWrite(pin, val);
         char mem[8];
         BlynkParam cmd(mem, 0, sizeof(mem));
         cmd.add("dw");
         cmd.add(pin);
         cmd.add(val);
-        static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_HARDWARE, 0, cmd.getBuffer(), cmd.getLength());
+        static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_HARDWARE, 0, cmd.getBuffer(), cmd.getLength()-1);
     }
 
     /**
@@ -185,13 +195,13 @@ public:
      * @param val Value to set
      */
     void analogWrite(uint8_t pin, int val) {
-    	::analogWrite(pin, val);
+        ::analogWrite(pin, val);
         char mem[12];
         BlynkParam cmd(mem, 0, sizeof(mem));
         cmd.add("aw");
         cmd.add(pin);
         cmd.add(val);
-        static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_HARDWARE, 0, cmd.getBuffer(), cmd.getLength());
+        static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_HARDWARE, 0, cmd.getBuffer(), cmd.getLength()-1);
     }
 
     /**

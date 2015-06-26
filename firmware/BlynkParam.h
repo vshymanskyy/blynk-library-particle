@@ -31,6 +31,7 @@ public:
         operator int () const           { return asInt(); }
         const char* asStr() const       { return ptr; }
         int         asInt() const       { return atoi(ptr); }
+        long        asLong() const      { return atol(ptr); }
         double      asDouble() const    { return atof(ptr); }
         bool isValid() const            { return ptr != NULL; }
 
@@ -58,6 +59,7 @@ public:
 
     const char* asStr() const       { return buff; }
     int         asInt() const       { return atoi(buff); }
+    long        asLong() const      { return atol(buff); }
     double      asDouble() const    { return atof(buff); }
 
     iterator begin() const { return iterator(buff); }
@@ -70,14 +72,25 @@ public:
     size_t getLength() const { return len; }
 
     // Modification
+    BLYNK_FORCE_INLINE
     void add(int value);
+    BLYNK_FORCE_INLINE
     void add(unsigned int value);
+    BLYNK_FORCE_INLINE
     void add(long value);
+    BLYNK_FORCE_INLINE
     void add(unsigned long value);
+    BLYNK_FORCE_INLINE
     void add(float value);
+    BLYNK_FORCE_INLINE
     void add(double value);
+    BLYNK_FORCE_INLINE
     void add(const char* str);
+    BLYNK_FORCE_INLINE
     void add(const void* b, size_t l);
+#ifdef ARDUINO
+    void add(const String& str);
+#endif
 
     template <typename TV>
     void add_key(const char* key, const TV& val) {
@@ -90,5 +103,152 @@ private:
     size_t	len;
     size_t	buff_size;
 };
+
+inline
+BlynkParam::iterator BlynkParam::operator[](int index) const
+{
+    const iterator e = end();
+    for (iterator it = begin(); it < e; ++it) {
+        if (!index--) {
+            return it;
+        }
+    }
+    return iterator::invalid();
+}
+
+inline
+BlynkParam::iterator BlynkParam::operator[](const char* key) const
+{
+    const iterator e = end();
+    for (iterator it = begin(); it < e; ++it) {
+        if (!strcmp(it.asStr(), key)) {
+            return ++it;
+        }
+        ++it;
+        if (it >= e) break;
+    }
+    return iterator::invalid();
+}
+
+inline
+void BlynkParam::add(const void* b, size_t l)
+{
+    if (len + l > buff_size)
+        return;
+    memcpy(buff+len, b, l);
+    len += l;
+}
+
+inline
+void BlynkParam::add(const char* str)
+{
+    add(str, strlen(str)+1);
+}
+
+#ifdef ARDUINO
+inline
+void BlynkParam::add(const String& str)
+{
+    size_t len = str.length()+1;
+    char buff[len];
+    str.toCharArray(buff, len);
+    BlynkParam::add(buff, len);
+}
+#endif
+
+#if defined(__AVR__)
+
+    #include <stdlib.h>
+
+	inline
+    void BlynkParam::add(int value)
+    {
+        char str[2 + 8 * sizeof(value)];
+        itoa(value, str, 10);
+        add(str);
+    }
+
+	inline
+    void BlynkParam::add(unsigned int value)
+    {
+        char str[1 + 8 * sizeof(value)];
+        utoa(value, str, 10);
+        add(str);
+    }
+
+	inline
+    void BlynkParam::add(long value)
+    {
+        char str[2 + 8 * sizeof(value)];
+        ltoa(value, str, 10);
+        add(str);
+    }
+
+	inline
+    void BlynkParam::add(unsigned long value)
+    {
+        char str[1 + 8 * sizeof(value)];
+        ultoa(value, str, 10);
+        add(str);
+    }
+
+	inline
+    void BlynkParam::add(float value)
+    {
+        char str[33];
+        dtostrf(value, 5, 3, str);
+        add(str);
+    }
+
+	inline
+    void BlynkParam::add(double value)
+    {
+        char str[33];
+        dtostrf(value, 5, 3, str);
+        add(str);
+    }
+
+#else
+
+    #include <stdio.h>
+
+	inline
+    void BlynkParam::add(int value)
+    {
+        len += snprintf(buff+len, buff_size-len, "%i", value)+1;
+    }
+
+	inline
+    void BlynkParam::add(unsigned int value)
+    {
+        len += snprintf(buff+len, buff_size-len, "%u", value)+1;
+    }
+
+	inline
+    void BlynkParam::add(long value)
+    {
+        len += snprintf(buff+len, buff_size-len, "%li", value)+1;
+    }
+
+	inline
+    void BlynkParam::add(unsigned long value)
+    {
+        len += snprintf(buff+len, buff_size-len, "%lu", value)+1;
+    }
+
+	inline
+    void BlynkParam::add(float value)
+    {
+        len += snprintf(buff+len, buff_size-len, "%2.3f", value)+1;
+    }
+
+	inline
+    void BlynkParam::add(double value)
+    {
+        len += snprintf(buff+len, buff_size-len, "%2.3f", value)+1;
+    }
+
+#endif
+
 
 #endif

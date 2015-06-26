@@ -14,9 +14,11 @@
 #include "BlynkConfig.h"
 #include <stddef.h>
 #ifdef ESP8266
+    extern "C" {
     #include "ets_sys.h"
     #include "os_type.h"
     #include "mem.h"
+    }
 #else
     #include <inttypes.h>
 #endif
@@ -73,15 +75,11 @@ void BlynkFatal() BLYNK_NORETURN;
         #define BLYNK_DBG_BREAK()    { for(;;); }
 #if defined(__SAM3X8E__)
         #define BLYNK_LOG(msg, ...)  blynk_dbg_print(msg, ##__VA_ARGS__)
-#elif defined (ARDUINO_ARCH_ESP8266)
-        extern "C" int ets_uart_printf(const char *fmt, ...);
-        #define BLYNK_LOG(msg, ...)  { ets_uart_printf("[%ld] " msg "\n", millis(), ##__VA_ARGS__); }
 #else
         #define BLYNK_LOG(msg, ...)  blynk_dbg_print(BLYNK_PSTR(msg), ##__VA_ARGS__)
 #endif
         #define BLYNK_ASSERT(expr)   { if(!(expr)) { BLYNK_LOG("Assertion %s failed.", #expr); BLYNK_DBG_BREAK() } }
 
-#if !defined (ARDUINO_ARCH_ESP8266)
         static
         void blynk_dbg_print(const BLYNK_PROGMEM char *fmt, ...)
         {
@@ -99,7 +97,6 @@ void BlynkFatal() BLYNK_NORETURN;
             BLYNK_PRINT.println(buff);
             va_end(ap);
         }
-#endif
 
     #elif defined(LINUX)
 
@@ -122,13 +119,6 @@ void BlynkFatal() BLYNK_NORETURN;
         #define BLYNK_DBG_DUMP(msg, addr, len)
         #define BLYNK_DBG_BREAK()    DebugBreak();
         #define BLYNK_LOG(...)       { char buff[1024]; snprintf(buff, sizeof(buff), __VA_ARGS__); OutputDebugString(buff); }
-        #define BLYNK_ASSERT(expr)   { if(!(expr)) { BLYNK_DBG_BREAK() } }
-
-    #elif defined(ESP8266)
-
-        #define BLYNK_DBG_DUMP(msg, addr, len) { ets_uart_printf(msg); uart0_tx_buffer(addr, len); ets_uart_printf("\n"); }
-        #define BLYNK_DBG_BREAK()    abort()
-        #define BLYNK_LOG(msg, ...)  ets_uart_printf("[%ld] " msg "\n", millis(), ##__VA_ARGS__)
         #define BLYNK_ASSERT(expr)   { if(!(expr)) { BLYNK_DBG_BREAK() } }
 
     #else
