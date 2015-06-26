@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include "BlynkConfig.h"
 #include "BlynkDebug.h"
+#include "application.h"
 
 #define BLYNK_PARAM_KV(k, v) k "\0" v "\0"
 
