@@ -11,8 +11,8 @@
 #ifndef BlynkApiSparkCore_h
 #define BlynkApiSparkCore_h
 
-#include "BlynkApi.h"
 #include "application.h"
+#include "BlynkApi.h"
 
 #ifndef BLYNK_INFO_DEVICE
     #define BLYNK_INFO_DEVICE  "Spark Core"
