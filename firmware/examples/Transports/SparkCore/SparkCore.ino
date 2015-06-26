@@ -24,12 +24,53 @@ char auth[] = "YourAuthToken";
 void setup()
 {
   Serial.begin(9600);
-  delay(10000); // Allow board to settle
+  delay(5000); // Allow board to settle
   Blynk.begin(auth);
+}
+
+// Attach a Button widget to the Virtual pin 1 - and send sweet tweets!
+BLYNK_WRITE(1) {
+    if (param.asInt()) { // On button down...
+        Blynk.tweet("My Particle project is tweeting using @blynk_app and this is awesome!\n @Particle #IoT #blynk");
+    }
+}
+
+// Attach a Slider widget to the Virtual pin 2 - and control the built-in RGB led!
+BLYNK_WRITE(2) {
+    RGB.control(true);
+    
+    byte rgb[3];
+    HsvToRgb(param.asDouble()/255, 1, 1, rgb);
+    RGB.color(rgb[0], rgb[1], rgb[2]);
 }
 
 void loop()
 {
   Blynk.run();
+}
+
+// *** Utility functions
+
+void HsvToRgb(double h, double s, double v, byte rgb[]) {
+    double r, g, b;
+
+    int i = int(h * 6);
+    double f = h * 6 - i;
+    double p = v * (1 - s);
+    double q = v * (1 - f * s);
+    double t = v * (1 - (1 - f) * s);
+
+    switch(i % 6){
+        case 0: r = v, g = t, b = p; break;
+        case 1: r = q, g = v, b = p; break;
+        case 2: r = p, g = v, b = t; break;
+        case 3: r = p, g = q, b = v; break;
+        case 4: r = t, g = p, b = v; break;
+        case 5: r = v, g = p, b = q; break;
+    }
+
+    rgb[0] = r * 255;
+    rgb[1] = g * 255;
+    rgb[2] = b * 255;
 }
 
