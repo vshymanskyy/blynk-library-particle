@@ -16,6 +16,7 @@
 #include "BlynkDebug.h"
 #include "BlynkProtocolDefs.h"
 #include "BlynkApi.h"
+#include "BlynkUtility.h"
 
 template <class Transp>
 class BlynkProtocol
