@@ -15,7 +15,6 @@
 #include <stdlib.h>
 #include "BlynkConfig.h"
 #include "BlynkDebug.h"
-#include "application.h"
 
 #define BLYNK_PARAM_KV(k, v) k "\0" v "\0"
 
@@ -89,7 +88,7 @@ public:
     void add(const char* str);
     BLYNK_FORCE_INLINE
     void add(const void* b, size_t l);
-#if defined (ARDUINO) || defined (SPARK)
+#if defined(ARDUINO) || defined(SPARK)
     void add(const String& str);
 #endif
 
@@ -146,7 +145,7 @@ void BlynkParam::add(const char* str)
     add(str, strlen(str)+1);
 }
 
-#if defined (ARDUINO) || defined (SPARK)
+#if defined(ARDUINO) || defined(SPARK)
 inline
 void BlynkParam::add(const String& str)
 {
