@@ -61,9 +61,23 @@ BLYNK_WRITE(2) {
 void loop()
 {
     Blynk.run();
+    
+    if (ModeBtnPressed()) {
+        Blynk.notify("Mode button was pressed");
+    }
 }
 
 // *** Utility functions
+
+bool ModeBtnPressed() {
+    if(millis() > 5000) {
+        if(BUTTON_GetDebouncedTime(BUTTON1) >= 50) {
+            BUTTON_ResetDebouncedState(BUTTON1);
+            return 1;
+        }
+    }
+    return 0;
+}
 
 void HsvToRgb(double h, double s, double v, byte rgb[]) {
     double r, g, b;
