@@ -23,9 +23,9 @@ char auth[] = "YourAuthToken";
 
 void setup()
 {
-  Serial.begin(9600);
-  delay(5000); // Allow board to settle
-  Blynk.begin(auth);
+    Serial.begin(9600);
+    delay(5000); // Allow board to settle
+    Blynk.begin(auth);
 }
 
 // Attach a Button widget to the Virtual pin 1 - and send sweet tweets!
@@ -46,16 +46,21 @@ BLYNK_WRITE(1) {
 
 // Attach a Slider widget to the Virtual pin 2 - and control the built-in RGB led!
 BLYNK_WRITE(2) {
-    RGB.control(true);
-    
-    byte rgb[3];
-    HsvToRgb(param.asDouble()/255, 1, 1, rgb);
-    RGB.color(rgb[0], rgb[1], rgb[2]);
+    if (param.asInt() > 0) {
+        RGB.control(true);
+        
+        byte rgb[3];
+        HsvToRgb(param.asDouble()/255, 1, 1, rgb);
+        RGB.color(rgb[0], rgb[1], rgb[2]);
+    } else {
+        RGB.control(false);
+    }
+
 }
 
 void loop()
 {
-  Blynk.run();
+    Blynk.run();
 }
 
 // *** Utility functions
