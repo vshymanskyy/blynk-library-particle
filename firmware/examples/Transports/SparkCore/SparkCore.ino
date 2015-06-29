@@ -21,6 +21,10 @@
 // Go to the Project Settings (nut icon).
 char auth[] = "YourAuthToken";
 
+
+// Attach a Button widget (Switch) to the Digital pin 7 - and control the built-in blue led.
+// No coding is required for direct pin control!
+
 void setup()
 {
     Serial.begin(9600);
