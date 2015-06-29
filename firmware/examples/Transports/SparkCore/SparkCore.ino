@@ -21,9 +21,10 @@
 // Go to the Project Settings (nut icon).
 char auth[] = "YourAuthToken";
 
-
-// Attach a Button widget (Switch) to the Digital pin 7 - and control the built-in blue led.
-// No coding is required for direct pin control!
+// Attach a Button widget (mode: Switch) to the Digital pin 7 - and control the built-in blue led.
+// Attach a Graph widget to Analog pin 1
+// Attach a Gauge widget to Analog pin 2
+// No coding is required for direct pin operations!
 
 void setup()
 {
@@ -32,9 +33,9 @@ void setup()
     Blynk.begin(auth);
 }
 
-// Attach a Button widget to the Virtual pin 1 - and send sweet tweets!
+// Attach a Button widget (mode: Push) to the Virtual pin 1 - and send sweet tweets!
 BLYNK_WRITE(1) {
-    if (param.asInt()) { // On button down...
+    if (param.asInt() == 1) { // On button down...
         // Tweeting!
         // Note:
         //   We allow 1 tweet per minute for now.
