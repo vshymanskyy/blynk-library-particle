@@ -11,7 +11,10 @@
 #define WidgetTerminal_h
 
 #include <Print.h>
+
+#if !defined(SPARK) // On Spark this is auto-included
 #include <Blynk/BlynkApi.h>
+#endif
 
 class WidgetTerminal
     : public Print
