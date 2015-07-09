@@ -29,10 +29,10 @@ public:
         , lastActivityIn(0)
         , lastActivityOut(0)
         , lastHeartbeat(0)
-        , currentMsgId(0)
 #ifdef BLYNK_MSG_LIMIT
         , deltaCmd(0)
 #endif
+        , currentMsgId(0)
     {}
 
     bool connected() { return conn.connected(); }
@@ -44,7 +44,7 @@ public:
     void sendCmd(uint8_t cmd, uint16_t id = 0, const void* data = NULL, size_t length = 0, const void* data2 = NULL, size_t length2 = 0);
 
 private:
-    bool readHeader(BlynkHeader& hdr);
+    int readHeader(BlynkHeader& hdr);
     uint16_t getNextMsgId();
 
 protected:
@@ -77,6 +77,10 @@ bool BlynkProtocol<Transp>::connect()
         return false;
     }
 
+#ifdef BLYNK_MSG_LIMIT
+    deltaCmd = 1000;
+#endif
+
     uint16_t id = getNextMsgId();
     sendCmd(BLYNK_CMD_LOGIN, id, authkey, strlen(authkey));
 
@@ -85,7 +89,7 @@ bool BlynkProtocol<Transp>::connect()
 #endif
 
     BlynkHeader hdr;
-    if (!readHeader(hdr)) {
+    if (readHeader(hdr) == 0) {
         hdr.length = BLYNK_TIMEOUT;
     }
 
@@ -113,9 +117,6 @@ bool BlynkProtocol<Transp>::connect()
     }
 
     lastHeartbeat = lastActivityIn = lastActivityOut = millis();
-#ifdef BLYNK_MSG_LIMIT
-    deltaCmd = 1000;
-#endif
     BLYNK_LOG("Ready!");
 #ifdef BLYNK_DEBUG
     BLYNK_LOG("Roundtrip: %dms", lastActivityIn-t);
@@ -136,8 +137,10 @@ bool BlynkProtocol<Transp>::run(bool avail)
     if (avail || conn.available() > 0) {
         //BLYNK_LOG("Available: %d", conn.available());
         //const unsigned long t = micros();
-        if (!processInput())
+        if (!processInput()) {
+            conn.disconnect();
             return false;
+        }
         //BLYNK_LOG("Proc time: %d", micros() - t);
     }
 
@@ -151,15 +154,12 @@ bool BlynkProtocol<Transp>::run(bool avail)
 #endif
         conn.disconnect();
         return false;
-    } else if ((t - lastActivityIn > 1000UL * BLYNK_HEARTBEAT ||
-               t - lastActivityOut > 1000UL * BLYNK_HEARTBEAT) &&
-               t - lastHeartbeat     > BLYNK_TIMEOUT_MS)
+    } else if ((t - lastActivityIn  > 1000UL * BLYNK_HEARTBEAT ||
+                t - lastActivityOut > 1000UL * BLYNK_HEARTBEAT) &&
+                t - lastHeartbeat   > BLYNK_TIMEOUT_MS)
     {
-        // Send ping if we didn't both send and receive something for BLYNK_HEARTBEAT seconds
-#ifdef BLYNK_DEBUG
-        BLYNK_LOG("Heartbeat");
-#endif
-
+        // Send ping if we didn't either send or receive something
+        // for BLYNK_HEARTBEAT seconds
         sendCmd(BLYNK_CMD_PING);
         lastHeartbeat = t;
     }
@@ -171,74 +171,88 @@ BLYNK_FORCE_INLINE
 bool BlynkProtocol<Transp>::processInput(void)
 {
     BlynkHeader hdr;
-    if (!readHeader(hdr))
-        return false;
+    const int ret = readHeader(hdr);
 
-    if (hdr.msg_id == 0) {
-#ifdef BLYNK_DEBUG
-        BLYNK_LOG("Got msg id 0");
-#endif
-        conn.disconnect();
-	return false;
+    if (ret == 0) {
+        return true; // Considered OK (no data on input)
     }
 
-    switch (hdr.type)
-    {
-    case BLYNK_CMD_RESPONSE: {
+    if (ret < 0 || hdr.msg_id == 0) {
+#ifdef BLYNK_DEBUG
+        BLYNK_LOG("Wrong header on input");
+#endif
+        return false;
+    }
+
+    if (hdr.type == BLYNK_CMD_RESPONSE) {
+        lastActivityIn = millis();
         if (BLYNK_NOT_AUTHENTICATED == hdr.length) {
-            conn.disconnect();
             return false;
         }
         // TODO: return code may indicate App presence
-    } break;
+        return true;
+    }
+
+    if (hdr.length > BLYNK_MAX_READBYTES) {
+#ifdef DEBUG
+        BLYNK_LOG("Packet size (%u) > max allowed (%u)", hdr.length, BLYNK_MAX_READBYTES);
+#endif
+        return false;
+    }
+
+    uint8_t inputBuffer[hdr.length+1]; // Add 1 to zero-terminate
+    if (hdr.length != conn.read(inputBuffer, hdr.length)) {
+#ifdef DEBUG
+        BLYNK_LOG("Can't read body");
+#endif
+        return false;
+    }
+    inputBuffer[hdr.length] = '\0';
+
+#ifdef BLYNK_DEBUG
+    BLYNK_DBG_DUMP(">", inputBuffer, hdr.length);
+#endif
+
+    lastActivityIn = millis();
+
+    switch (hdr.type)
+    {
     case BLYNK_CMD_PING: {
         sendCmd(BLYNK_CMD_RESPONSE, hdr.msg_id, NULL, BLYNK_SUCCESS);
     } break;
     case BLYNK_CMD_HARDWARE:
     case BLYNK_CMD_BRIDGE: {
-        if (hdr.length > BLYNK_MAX_READBYTES) {
-            BLYNK_LOG("Packet size (%u) > max allowed (%u)", hdr.length, BLYNK_MAX_READBYTES);
-            conn.disconnect();
-            return false;
-        }
-
-        uint8_t inputBuffer[hdr.length+1]; // Add 1 to zero-terminate
-        if (hdr.length != conn.read(inputBuffer, hdr.length)) {
-            BLYNK_LOG("Can't read body");
-            return false;
-        }
-        inputBuffer[hdr.length] = '\0';
-
-#ifdef BLYNK_DEBUG
-        BLYNK_DBG_DUMP(">", inputBuffer, hdr.length);
-#endif
-
         currentMsgId = hdr.msg_id;
         this->processCmd(inputBuffer, hdr.length);
         currentMsgId = 0;
     } break;
     default:
+#ifdef BLYNK_DEBUG
         BLYNK_LOG("Invalid header type: %d", hdr.type);
-        conn.disconnect();
+#endif
         return false;
     }
 
-    lastActivityIn = millis();
     return true;
 }
 
 template <class Transp>
-bool BlynkProtocol<Transp>::readHeader(BlynkHeader& hdr)
+int BlynkProtocol<Transp>::readHeader(BlynkHeader& hdr)
 {
-    if (sizeof(hdr) != conn.read(&hdr, sizeof(hdr))) {
-        return false;
+    size_t rlen = conn.read(&hdr, sizeof(hdr));
+    if (rlen == 0) {
+        return 0;
+    }
+
+    if (sizeof(hdr) != rlen) {
+        return -1;
     }
     hdr.msg_id = ntohs(hdr.msg_id);
     hdr.length = ntohs(hdr.length);
 #ifdef BLYNK_DEBUG
     BLYNK_LOG(">msg %d,%u,%u", hdr.type, hdr.msg_id, hdr.length);
 #endif
-    return true;
+    return rlen;
 }
 
 template <class Transp>
@@ -270,19 +284,21 @@ void BlynkProtocol<Transp>::sendCmd(uint8_t cmd, uint16_t id, const void* data, 
 
     size_t len2s = sizeof(BlynkHeader);
     if (data && length) {
-    	memcpy(buff + len2s, data, length);
-    	len2s += length;
+        memcpy(buff + len2s, data, length);
+        len2s += length;
     }
     if (data2 && length2) {
-    	memcpy(buff + len2s, data2, length2);
-    	len2s += length2;
+        memcpy(buff + len2s, data2, length2);
+        len2s += length2;
     }
 #ifdef BLYNK_DEBUG
     BLYNK_DBG_DUMP("<", buff+5, len2s-5);
 #endif
     size_t wlen = conn.write(buff, len2s);
     if (wlen != len2s) {
+#ifdef BLYNK_DEBUG
         BLYNK_LOG("Sent %u/%u", wlen, len2s);
+#endif
         conn.disconnect();
         return;
     }
@@ -310,7 +326,9 @@ void BlynkProtocol<Transp>::sendCmd(uint8_t cmd, uint16_t id, const void* data, 
         }
 
         if (wlen != sizeof(hdr)+length+length2) {
+#ifdef BLYNK_DEBUG
             BLYNK_LOG("Sent %u/%u", wlen, sizeof(hdr)+length+length2);
+#endif
             conn.disconnect();
             return;
         }
@@ -318,17 +336,18 @@ void BlynkProtocol<Transp>::sendCmd(uint8_t cmd, uint16_t id, const void* data, 
 
 #endif
 
-    const uint32_t ts = millis();
 #ifdef BLYNK_MSG_LIMIT
-    BlynkAverageSample<10>(deltaCmd, ts - lastActivityOut);
+    const uint32_t ts = millis();
+    BlynkAverageSample<32>(deltaCmd, ts - lastActivityOut);
     lastActivityOut = ts;
+    //BLYNK_LOG("Delta: %u", deltaCmd);
     if (deltaCmd < (1000/BLYNK_MSG_LIMIT)) {
         BLYNK_LOG_TROUBLE("flood");
         conn.disconnect();
         ::delay(5000);
     }
 #else
-    lastActivityOut = ts;
+    lastActivityOut = millis();
 #endif
 
 }
