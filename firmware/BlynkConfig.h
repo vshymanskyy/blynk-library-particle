@@ -22,7 +22,7 @@
  * Professional settings
  ***************************************************/
 // Library version.
-#define BLYNK_VERSION        "0.2.4"
+#define BLYNK_VERSION        "0.3.0"
 
 // Heartbeat period in seconds.
 #define BLYNK_HEARTBEAT      10
@@ -53,5 +53,11 @@
 
 // Uncomment to enable experimental functions.
 //#define BLYNK_EXPERIMENTAL
+
+// Uncomment to disable all float/double usage
+//#define BLYNK_NO_FLOAT
+
+// Uncomment to switch to direct-connect mode
+//#define BLYNK_USE_DIRECT_CONNECT
 
 #endif

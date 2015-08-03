@@ -47,6 +47,7 @@ void BlynkApi<Proto>::processCmd(const void* buff, size_t len)
 #ifdef BLYNK_INFO_CONNECTION
             BLYNK_PARAM_KV("con"    , BLYNK_INFO_CONNECTION)
 #endif
+            BLYNK_PARAM_KV("build"  , __DATE__ " " __TIME__)
         ;
         const size_t profile_len = sizeof(profile)-1;
 
@@ -65,11 +66,12 @@ void BlynkApi<Proto>::processCmd(const void* buff, size_t len)
         return;
     unsigned pin = it.asInt();
 #if defined(analogInputToDigitalPin)
-	if (pin == 0 && it.asStr()[0] == 'A') {
-		pin = analogInputToDigitalPin(atoi(it.asStr()+1));
-	}
+    if (pin == 0 && it.asStr()[0] == 'A') {
+        pin = analogInputToDigitalPin(atoi(it.asStr()+1));
+    }
+    #pragma message("Good! Analog pins can be referenced on this device by name.")
 #else
-	#warning "analogInputToDigitalPin not defined => Named analog pins will not work"
+    #warning "analogInputToDigitalPin not defined => Named analog pins will not work"
 #endif
 
 #ifndef BLYNK_NO_BUILTIN
@@ -120,10 +122,14 @@ void BlynkApi<Proto>::processCmd(const void* buff, size_t len)
                     pinMode(pin, INPUT);
                 } else if (!strcmp(it.asStr(), "out") || !strcmp(it.asStr(), "pwm")) {
                     pinMode(pin, OUTPUT);
+#ifdef INPUT_PULLUP
                 } else if (!strcmp(it.asStr(), "pu")) {
                     pinMode(pin, INPUT_PULLUP);
+#endif
+#ifdef INPUT_PULLDOWN
                 } else if (!strcmp(it.asStr(), "pd")) {
                     pinMode(pin, INPUT_PULLDOWN);
+#endif
                 } else {
 #ifdef BLYNK_DEBUG
                     BLYNK_LOG("Invalid pinMode %u -> %s", pin, it.asStr());
@@ -140,6 +146,10 @@ void BlynkApi<Proto>::processCmd(const void* buff, size_t len)
         if (!strcmp(cmd, "dw")) {
             //BLYNK_LOG("digitalWrite %d -> %d", pin, it.asInt());
             pinMode(pin, OUTPUT);
+#ifdef ESP8266
+            // Disable PWM...
+            analogWrite(pin, 0);
+#endif
             digitalWrite(pin, it.asInt() ? HIGH : LOW);
         } else if (!strcmp(cmd, "aw")) {
             //BLYNK_LOG("analogWrite %d -> %d", pin, it.asInt());

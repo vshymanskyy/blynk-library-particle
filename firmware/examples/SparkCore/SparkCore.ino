@@ -34,7 +34,7 @@ void setup()
 }
 
 // Attach a Button widget (mode: Push) to the Virtual pin 1 - and send sweet tweets!
-BLYNK_WRITE(1) {
+BLYNK_WRITE(V1) {
     if (param.asInt() == 1) { // On button down...
         // Tweeting!
         // Note:
@@ -50,7 +50,7 @@ BLYNK_WRITE(1) {
 }
 
 // Attach a Slider widget to the Virtual pin 2 - and control the built-in RGB led!
-BLYNK_WRITE(2) {
+BLYNK_WRITE(V2) {
     if (param.asInt() > 0) {
         RGB.control(true);
         
@@ -60,7 +60,6 @@ BLYNK_WRITE(2) {
     } else {
         RGB.control(false);
     }
-
 }
 
 void loop()
