@@ -10,7 +10,7 @@
 #ifndef WidgetTerminal_h
 #define WidgetTerminal_h
 
-#include <Blynk/BlynkApi.h>
+#include "BlynkApi.h"
 #if !defined(SPARK) // On Spark this is auto-included
 #include <Print.h>
 #endif
