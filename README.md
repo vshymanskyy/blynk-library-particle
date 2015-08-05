@@ -15,3 +15,9 @@ You can easily apply any type of board/connection to all examples.
 ### License
 
 This project is released under The MIT License (MIT)
+
+__________
+
+Implementations for other platforms:
+* [Arduino](https://github.com/blynkkk/blynk-library)
+* [Node.js + Espruino](https://github.com/vshymanskyy/blynk-library-js)
