@@ -15,7 +15,7 @@
  **************************************************************/
 //#define BLYNK_DEBUG // Uncomment this to see debug prints
 #define BLYNK_PRINT Serial
-#include "blynk/BlynkSimpleSparkCore.h"
+#include "blynk/BlynkSimpleParticle.h"
 
 // You should get Auth Token in the Blynk App.
 // Go to the Project Settings (nut icon).

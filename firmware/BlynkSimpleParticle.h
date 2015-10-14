@@ -1,5 +1,5 @@
 /**
- * @file       BlynkSimpleSparkCore.h
+ * @file       BlynkSimpleParticle.h
  * @author     Volodymyr Shymanskyy
  * @license    This project is released under the MIT License (MIT)
  * @copyright  Copyright (c) 2015 Volodymyr Shymanskyy
@@ -8,10 +8,8 @@
  *
  */
 
-#ifndef BlynkSimpleSparkCore_h
-#define BlynkSimpleSparkCore_h
-
-#warning "You should use BlynkSimpleParticle.h now. BlynkSimpleSparkCore.h will be removed"
+#ifndef BlynkSimpleParticle_h
+#define BlynkSimpleParticle_h
 
 #include "BlynkParticle.h"
 

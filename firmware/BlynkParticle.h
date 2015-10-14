@@ -1,5 +1,5 @@
 /**
- * @file       BlynkSparkCore.h
+ * @file       BlynkParticle.h
  * @author     Volodymyr Shymanskyy
  * @license    This project is released under the MIT License (MIT)
  * @copyright  Copyright (c) 2015 Volodymyr Shymanskyy
@@ -8,18 +8,18 @@
  *
  */
 
-#ifndef BlynkSparkCore_h
-#define BlynkSparkCore_h
+#ifndef BlynkParticle_h
+#define BlynkParticle_h
 
 #define BLYNK_INFO_CONNECTION "CC3000"
 
-#include "BlynkApiSparkCore.h"
+#include "BlynkApiParticle.h"
 #include "BlynkProtocol.h"
 
-class BlynkTransportSparkCore
+class BlynkTransportParticle
 {
 public:
-    BlynkTransportSparkCore()
+    BlynkTransportParticle()
         : domain(NULL), port(0)
     {}
 
@@ -66,12 +66,12 @@ private:
     uint16_t    port;
 };
 
-class BlynkSparkCore
-    : public BlynkProtocol<BlynkTransportSparkCore>
+class BlynkParticle
+    : public BlynkProtocol<BlynkTransportParticle>
 {
-    typedef BlynkProtocol<BlynkTransportSparkCore> Base;
+    typedef BlynkProtocol<BlynkTransportParticle> Base;
 public:
-    BlynkSparkCore(BlynkTransportSparkCore& transp)
+    BlynkParticle(BlynkTransportParticle& transp)
         : Base(transp)
     {}
 
