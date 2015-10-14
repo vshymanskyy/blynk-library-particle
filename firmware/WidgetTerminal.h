@@ -11,7 +11,7 @@
 #define WidgetTerminal_h
 
 #include "BlynkApi.h"
-#if !(defined(SPARK) || defined(PARTICLE)) // On Spark this is auto-included
+#if !(defined(SPARK) || defined(PARTICLE)) // On Particle this is auto-included
     #include <Print.h>
 #endif
 

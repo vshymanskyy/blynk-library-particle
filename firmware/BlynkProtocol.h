@@ -115,7 +115,7 @@ private:
 template <class Transp>
 bool BlynkProtocol<Transp>::run(bool avail)
 {
-#if defined(ARDUINO) && (ARDUINO >= 151)
+#if !defined(BLYNK_NO_YIELD)
     yield();
 #endif
 
@@ -126,7 +126,7 @@ bool BlynkProtocol<Transp>::run(bool avail)
     bool tconn = conn.connected();
 
     if (tconn) {
-        while (avail || conn.available() > 0) {
+        if (avail || conn.available() > 0) {
             //BLYNK_LOG("Available: %d", conn.available());
             //const unsigned long t = micros();
             if (!processInput()) {
@@ -138,10 +138,6 @@ bool BlynkProtocol<Transp>::run(bool avail)
                 return false;
             }
             //BLYNK_LOG("Proc time: %d", micros() - t);
-            avail = false;
-#if defined(ARDUINO) && (ARDUINO >= 151)
-            yield();
-#endif
         }
     }
 
@@ -351,7 +347,7 @@ void BlynkProtocol<Transp>::sendCmd(uint8_t cmd, uint16_t id, const void* data, 
 #if defined(BLYNK_SEND_ATOMIC)|| defined(ESP8266) || defined(SPARK) || defined(PARTICLE) || defined(ENERGIA)
     // Those have more RAM and like single write at a time...
 
-    uint8_t buff[BLYNK_MAX_READBYTES];
+    uint8_t buff[BLYNK_MAX_READBYTES]; // TODO: Eliminate constant
     BlynkHeader* hdr = (BlynkHeader*)buff;
     hdr->type = cmd;
     hdr->msg_id = htons(id);
@@ -377,7 +373,16 @@ void BlynkProtocol<Transp>::sendCmd(uint8_t cmd, uint16_t id, const void* data, 
 
     while (wlen < len2s) {
         const size_t chunk = BlynkMin(size_t(BLYNK_SEND_CHUNK), len2s - wlen);
-        wlen += conn.write(buff + wlen, chunk);
+        const size_t wlentmp = conn.write(buff + wlen, chunk);
+    	if (wlentmp == 0) {
+#ifdef BLYNK_DEBUG
+            BLYNK_LOG("Cmd not sent");
+#endif
+            conn.disconnect();
+            state = CONNECTING;
+            return;
+    	}
+        wlen += wlentmp;
 #ifdef BLYNK_SEND_THROTTLE
         delay(BLYNK_SEND_THROTTLE);
 #endif
