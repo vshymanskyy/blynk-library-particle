@@ -13,7 +13,7 @@
 
 #include "BlynkConfig.h"
 #include "BlynkDebug.h"
-#include "BlynkParam.h"
+#include "Blynk/BlynkParam.h"
 #include "BlynkHandlers.h"
 #include "BlynkProtocolDefs.h"
 

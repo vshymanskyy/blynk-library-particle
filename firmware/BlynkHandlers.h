@@ -12,7 +12,7 @@
 #define BlynkHandlers_h
 
 #include "BlynkConfig.h"
-#include "BlynkParam.h"
+#include "Blynk/BlynkParam.h"
 
 // Helper macro
 
