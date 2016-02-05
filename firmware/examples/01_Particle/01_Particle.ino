@@ -11,6 +11,9 @@
  *
  * Blynk library is licensed under MIT license
  * This example code is in public domain.
+ * 
+ * WARNING: It is recommended to use SparkCorePolledTimer library
+ *          to make periodic actions (similar to SimpleTimer on Arduino).
  *
  **************************************************************/
 //#define BLYNK_DEBUG // Uncomment this to see debug prints
