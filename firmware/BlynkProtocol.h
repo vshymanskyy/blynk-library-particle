@@ -123,7 +123,7 @@ bool BlynkProtocol<Transp>::run(bool avail)
         return false;
     }
 
-    bool tconn = conn.connected();
+    const bool tconn = conn.connected();
 
     if (tconn) {
         if (avail || conn.available() > 0) {
