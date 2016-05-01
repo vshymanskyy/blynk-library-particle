@@ -11,7 +11,7 @@
 #ifndef BlynkConfig_h
 #define BlynkConfig_h
 
-#include <BlynkDetectDevice.h>
+#include "BlynkDetectDevice.h"
 
 /***************************************************
  * Change these settings to match your need
