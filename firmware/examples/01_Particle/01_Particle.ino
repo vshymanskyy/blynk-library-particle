@@ -58,7 +58,7 @@ BLYNK_WRITE(V2) {
     int r = param[0].asInt();
     int g = param[1].asInt();
     int b = param[2].asInt();
-    if (r > 0 && g > 0 && b > 0) {
+    if (r > 0 || g > 0 || b > 0) {
         RGB.control(true);
         RGB.color(r, g, b);
     } else {

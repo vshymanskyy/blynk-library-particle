@@ -17,12 +17,11 @@ size_t BlynkFreeRam()
 void BlynkReset()
 {
     System.reset();
-    for(;;);
+    for(;;); // To make compiler happy
 }
 
 void BlynkFatal()
 {
-    BLYNK_LOG("Resetting");
-    delay(100);
+    delay(10000L);
     BlynkReset();
 }
