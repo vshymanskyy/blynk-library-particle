@@ -216,9 +216,43 @@ public:
         static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_EMAIL, 0, cmd.getBuffer(), cmd.getLength()-1);
     }
 
+    /**
+     * Sends an email message
+     *
+     * @param subject Subject of message
+     * @param msg     Text of the message
+     */
+    template <typename T1, typename T2>
+    void email(const T1& subject, const T2& msg) {
+        char mem[BLYNK_MAX_SENDBYTES];
+        BlynkParam cmd(mem, 0, sizeof(mem));
+        cmd.add(subject);
+        cmd.add(msg);
+        static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_EMAIL, 0, cmd.getBuffer(), cmd.getLength()-1);
+    }
+
 #if defined(BLYNK_EXPERIMENTAL)
     // Attention!
     // Every function in this section may be changed, removed or renamed.
+
+    /**
+     * Sets property of a Widget
+     *
+     * @experimental
+     *
+     * @param pin      Virtual Pin number
+     * @param property Property name ("enabled", "label", "color", "bg_color" ...)
+     * @param value    Property value
+     */
+    template <typename T1, typename T2>
+    void setProperty(int pin, const T1& property, const T2& value) {
+        char mem[BLYNK_MAX_SENDBYTES];
+        BlynkParam cmd(mem, 0, sizeof(mem));
+        cmd.add(pin);
+        cmd.add(property);
+        cmd.add(value);
+        static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_PROPERTY, 0, cmd.getBuffer(), cmd.getLength()-1);
+    }
 
     /**
      * Refreshes value of a widget by running
@@ -261,6 +295,7 @@ public:
 
 protected:
     void Init();
+    static millis_time_t getMillis();
     void processCmd(const void* buff, size_t len);
     void sendInfo();
 

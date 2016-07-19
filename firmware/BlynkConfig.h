@@ -25,7 +25,7 @@
  * Professional settings
  ***************************************************/
 // Library version.
-#define BLYNK_VERSION        "0.3.5"
+#define BLYNK_VERSION        "0.3.8"
 
 // Heartbeat period in seconds.
 #ifndef BLYNK_HEARTBEAT
@@ -60,6 +60,9 @@
 
 // Uncomment to enable debug prints.
 //#define BLYNK_DEBUG
+
+// Uncomment to force-enable 128 virtual pins
+//#define BLYNK_USE_128_VPINS
 
 // Uncomment to enable experimental functions.
 //#define BLYNK_EXPERIMENTAL
