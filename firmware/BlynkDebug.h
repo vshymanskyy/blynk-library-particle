@@ -52,6 +52,7 @@
 #define COUNT_OF(x) ((sizeof(x)/sizeof(0[x])) / ((size_t)(!(sizeof(x) % sizeof(0[x])))))
 #define BLYNK_ATTR_PACKED __attribute__ ((__packed__))
 #define BLYNK_NORETURN __attribute__ ((noreturn))
+#define BLYNK_UNUSED __attribute__((__unused__))
 
 // Causes problems on some platforms
 #define BLYNK_FORCE_INLINE inline //__attribute__((always_inline))
