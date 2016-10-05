@@ -158,7 +158,7 @@ void BlynkFatal() BLYNK_NORETURN;
         #include <stdio.h>
         #include <stdarg.h>
 
-        static
+        BLYNK_UNUSED
         void blynk_dbg_print(const char* BLYNK_PROGMEM fmt, ...)
         {
             va_list ap;

@@ -231,21 +231,17 @@ public:
         static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_EMAIL, 0, cmd.getBuffer(), cmd.getLength()-1);
     }
 
-#if defined(BLYNK_EXPERIMENTAL)
-    // Attention!
-    // Every function in this section may be changed, removed or renamed.
-
     /**
      * Sets property of a Widget
      *
      * @experimental
      *
      * @param pin      Virtual Pin number
-     * @param property Property name ("enabled", "label", "color", "bg_color" ...)
+     * @param property Property name ("label", "labels", "color", ...)
      * @param value    Property value
      */
-    template <typename T1, typename T2>
-    void setProperty(int pin, const T1& property, const T2& value) {
+    template <typename T, typename T1>
+    void setProperty(int pin, const T& property, const T1& value) {
         char mem[BLYNK_MAX_SENDBYTES];
         BlynkParam cmd(mem, 0, sizeof(mem));
         cmd.add(pin);
@@ -253,6 +249,64 @@ public:
         cmd.add(value);
         static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_PROPERTY, 0, cmd.getBuffer(), cmd.getLength()-1);
     }
+
+    template <typename T, typename T1, typename T2>
+    void setProperty(int pin, const T& property, const T1& value1, const T2& value2) {
+        char mem[BLYNK_MAX_SENDBYTES];
+        BlynkParam cmd(mem, 0, sizeof(mem));
+        cmd.add(pin);
+        cmd.add(property);
+        cmd.add(value1);
+        cmd.add(value2);
+        static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_PROPERTY, 0, cmd.getBuffer(), cmd.getLength()-1);
+    }
+
+    template <typename T, typename T1, typename T2, typename T3>
+    void setProperty(int pin, const T& property, const T1& value1, const T2& value2, const T3& value3) {
+        char mem[BLYNK_MAX_SENDBYTES];
+        BlynkParam cmd(mem, 0, sizeof(mem));
+        cmd.add(pin);
+        cmd.add(property);
+        cmd.add(value1);
+        cmd.add(value2);
+        cmd.add(value3);
+        static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_PROPERTY, 0, cmd.getBuffer(), cmd.getLength()-1);
+    }
+
+    template <typename T, typename T1, typename T2, typename T3, typename T4>
+    void setProperty(int pin, const T& property, const T1& value1, const T2& value2, const T3& value3, const T4& value4) {
+        char mem[BLYNK_MAX_SENDBYTES];
+        BlynkParam cmd(mem, 0, sizeof(mem));
+        cmd.add(pin);
+        cmd.add(property);
+        cmd.add(value1);
+        cmd.add(value2);
+        cmd.add(value3);
+        cmd.add(value4);
+        static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_PROPERTY, 0, cmd.getBuffer(), cmd.getLength()-1);
+    }
+
+    template <typename T>
+    void setProperty(int pin, const T& property, const BlynkParam& param) {
+        char mem[32];
+        BlynkParam cmd(mem, 0, sizeof(mem));
+        cmd.add(pin);
+        cmd.add(property);
+        static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_PROPERTY, 0, cmd.getBuffer(), cmd.getLength(), param.getBuffer(), param.getLength());
+    }
+
+    template <typename T>
+    void setProperty(int pin, const T& property, const BlynkParamAllocated& param) {
+        char mem[32];
+        BlynkParam cmd(mem, 0, sizeof(mem));
+        cmd.add(pin);
+        cmd.add(property);
+        static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_PROPERTY, 0, cmd.getBuffer(), cmd.getLength(), param.getBuffer(), param.getLength());
+    }
+
+#if defined(BLYNK_EXPERIMENTAL)
+    // Attention!
+    // Every function in this section may be changed, removed or renamed.
 
     /**
      * Refreshes value of a widget by running
