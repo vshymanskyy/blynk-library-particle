@@ -11,12 +11,17 @@
  *
  * Blynk library is licensed under MIT license
  * This example code is in public domain.
- * 
+ *
+ **************************************************************
+ *
+ * No coding required for direct digital/analog pin operations!
+ *
  * WARNING: It is recommended to use SparkCorePolledTimer library
  *          to make periodic actions (similar to SimpleTimer on Arduino).
  *
  **************************************************************/
-//#define BLYNK_DEBUG // Uncomment this to see debug prints
+
+//#define BLYNK_DEBUG       // Uncomment this to see debug prints
 #define BLYNK_PRINT Serial
 #include "blynk/blynk.h"
 
@@ -28,12 +33,11 @@ char auth[] = "YourAuthToken";
 // Attach a Graph widget to Analog pin 1
 // Attach a Gauge widget to Analog pin 2
 
-// No coding required for direct pin operations!
-
 void setup()
 {
     Serial.begin(9600);
     delay(5000); // Allow board to settle
+
     Blynk.begin(auth);
 }
 
@@ -45,7 +49,7 @@ BLYNK_WRITE(V1) {
         //   We allow 1 tweet per minute for now.
         //   Twitter doesn't allow identical subsequent messages.
         Blynk.tweet("My Particle project is tweeting using @blynk_app and it’s awesome!\n @Particle #IoT #blynk");
-        
+
         // Pushing notification to the app!
         // Note:
         //   We allow 1 notification per minute for now.
@@ -69,7 +73,7 @@ BLYNK_WRITE(V2) {
 void loop()
 {
     Blynk.run();
-    
+
     if (ModeBtnPressed()) {
         Blynk.notify("Mode button was pressed");
     }
