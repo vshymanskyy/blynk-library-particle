@@ -45,18 +45,6 @@
     #define BLYNK_NO_YIELD
 #endif
 
-// General defines
-
-#define STRINGIFY(x) #x
-#define TOSTRING(x) STRINGIFY(x)
-#define COUNT_OF(x) ((sizeof(x)/sizeof(0[x])) / ((size_t)(!(sizeof(x) % sizeof(0[x])))))
-#define BLYNK_ATTR_PACKED __attribute__ ((__packed__))
-#define BLYNK_NORETURN __attribute__ ((noreturn))
-#define BLYNK_UNUSED __attribute__((__unused__))
-
-// Causes problems on some platforms
-#define BLYNK_FORCE_INLINE inline //__attribute__((always_inline))
-
 #if defined(__AVR__)
     #include <avr/pgmspace.h>
     #define BLYNK_HAS_PROGMEM
@@ -148,8 +136,9 @@ void BlynkFatal() BLYNK_NORETURN;
                         prev_print = false;
                     }
                 }
-                if (!prev_print)
-                	BLYNK_PRINT.print(']');
+                if (!prev_print) {
+                    BLYNK_PRINT.print(']');
+                }
                 BLYNK_PRINT.println();
             }
         }
@@ -167,7 +156,7 @@ void BlynkFatal() BLYNK_NORETURN;
             char buff[128];
             BLYNK_PRINT.print('[');
             BLYNK_PRINT.print(millis());
-            BLYNK_PRINT.print(F("] "));
+            BLYNK_PRINT.print(BLYNK_F("] "));
 #if defined(__AVR__)
             vsnprintf_P(buff, sizeof(buff), fmt, ap);
 #else
