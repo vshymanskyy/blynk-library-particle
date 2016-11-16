@@ -97,6 +97,17 @@ public:
     void add(String& str);
 #endif
 
+    template<typename T, typename... Args>
+    void add_multi(T last) {
+        add(last);
+    }
+
+    template<typename T, typename... Args>
+    void add_multi(T head, Args... tail) {
+        add(head);
+        add_multi(tail...);
+    }
+
     template <typename TV>
     void add_key(const char* key, const TV& val) {
         add(key);

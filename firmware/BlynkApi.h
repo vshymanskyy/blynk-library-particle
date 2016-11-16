@@ -68,49 +68,13 @@ public:
      * @param pin  Virtual Pin number
      * @param data Value to be sent
      */
-    template <typename T>
-    void virtualWrite(int pin, const T& data) {
+    template <typename... Args>
+    void virtualWrite(int pin, Args... values) {
         char mem[BLYNK_MAX_SENDBYTES];
         BlynkParam cmd(mem, 0, sizeof(mem));
         cmd.add("vw");
         cmd.add(pin);
-        cmd.add(data);
-        static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_HARDWARE, 0, cmd.getBuffer(), cmd.getLength()-1);
-    }
-
-    template <typename T1, typename T2>
-    void virtualWrite(int pin, const T1& data1, const T2& data2) {
-        char mem[BLYNK_MAX_SENDBYTES];
-        BlynkParam cmd(mem, 0, sizeof(mem));
-        cmd.add("vw");
-        cmd.add(pin);
-        cmd.add(data1);
-        cmd.add(data2);
-        static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_HARDWARE, 0, cmd.getBuffer(), cmd.getLength()-1);
-    }
-
-    template <typename T1, typename T2, typename T3>
-    void virtualWrite(int pin, const T1& data1, const T2& data2, const T3& data3) {
-        char mem[BLYNK_MAX_SENDBYTES];
-        BlynkParam cmd(mem, 0, sizeof(mem));
-        cmd.add("vw");
-        cmd.add(pin);
-        cmd.add(data1);
-        cmd.add(data2);
-        cmd.add(data3);
-        static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_HARDWARE, 0, cmd.getBuffer(), cmd.getLength()-1);
-    }
-
-    template <typename T1, typename T2, typename T3, typename T4>
-    void virtualWrite(int pin, const T1& data1, const T2& data2, const T3& data3, const T4& data4) {
-        char mem[BLYNK_MAX_SENDBYTES];
-        BlynkParam cmd(mem, 0, sizeof(mem));
-        cmd.add("vw");
-        cmd.add(pin);
-        cmd.add(data1);
-        cmd.add(data2);
-        cmd.add(data3);
-        cmd.add(data4);
+        cmd.add_multi(values...);
         static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_HARDWARE, 0, cmd.getBuffer(), cmd.getLength()-1);
     }
 
@@ -152,11 +116,12 @@ public:
      *
      * @param pin Virtual Pin number
      */
-    void syncVirtual(int pin) {
+    template <typename... Args>
+    void syncVirtual(Args... pins) {
         char mem[8];
         BlynkParam cmd(mem, 0, sizeof(mem));
         cmd.add("vr");
-        cmd.add(pin);
+        cmd.add_multi(pins...);
         static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_HARDWARE_SYNC, 0, cmd.getBuffer(), cmd.getLength()-1);
     }
 
@@ -240,49 +205,13 @@ public:
      * @param property Property name ("label", "labels", "color", ...)
      * @param value    Property value
      */
-    template <typename T, typename T1>
-    void setProperty(int pin, const T& property, const T1& value) {
+    template <typename T, typename... Args>
+    void setProperty(int pin, const T& property, Args... values) {
         char mem[BLYNK_MAX_SENDBYTES];
         BlynkParam cmd(mem, 0, sizeof(mem));
         cmd.add(pin);
         cmd.add(property);
-        cmd.add(value);
-        static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_PROPERTY, 0, cmd.getBuffer(), cmd.getLength()-1);
-    }
-
-    template <typename T, typename T1, typename T2>
-    void setProperty(int pin, const T& property, const T1& value1, const T2& value2) {
-        char mem[BLYNK_MAX_SENDBYTES];
-        BlynkParam cmd(mem, 0, sizeof(mem));
-        cmd.add(pin);
-        cmd.add(property);
-        cmd.add(value1);
-        cmd.add(value2);
-        static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_PROPERTY, 0, cmd.getBuffer(), cmd.getLength()-1);
-    }
-
-    template <typename T, typename T1, typename T2, typename T3>
-    void setProperty(int pin, const T& property, const T1& value1, const T2& value2, const T3& value3) {
-        char mem[BLYNK_MAX_SENDBYTES];
-        BlynkParam cmd(mem, 0, sizeof(mem));
-        cmd.add(pin);
-        cmd.add(property);
-        cmd.add(value1);
-        cmd.add(value2);
-        cmd.add(value3);
-        static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_PROPERTY, 0, cmd.getBuffer(), cmd.getLength()-1);
-    }
-
-    template <typename T, typename T1, typename T2, typename T3, typename T4>
-    void setProperty(int pin, const T& property, const T1& value1, const T2& value2, const T3& value3, const T4& value4) {
-        char mem[BLYNK_MAX_SENDBYTES];
-        BlynkParam cmd(mem, 0, sizeof(mem));
-        cmd.add(pin);
-        cmd.add(property);
-        cmd.add(value1);
-        cmd.add(value2);
-        cmd.add(value3);
-        cmd.add(value4);
+        cmd.add_multi(values...);
         static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_PROPERTY, 0, cmd.getBuffer(), cmd.getLength()-1);
     }
 

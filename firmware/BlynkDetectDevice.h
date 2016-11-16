@@ -19,6 +19,7 @@
 #define BLYNK_ATTR_PACKED __attribute__ ((__packed__))
 #define BLYNK_NORETURN __attribute__ ((noreturn))
 #define BLYNK_UNUSED __attribute__((__unused__))
+#define BLYNK_DEPRECATED __attribute__ ((deprecated))
 
 // Causes problems on some platforms
 #define BLYNK_FORCE_INLINE inline //__attribute__((always_inline))
@@ -302,6 +303,11 @@
         /* Simblee */
         #elif defined(__Simblee__)
         #define BLYNK_INFO_DEVICE  "Simblee"
+        #define BLYNK_USE_128_VPINS
+
+        /* Nordic NRF5x */
+        #elif defined(ARDUINO_ARCH_NRF5)
+        #define BLYNK_INFO_DEVICE  "nRF5"
         #define BLYNK_USE_128_VPINS
 
         #else
