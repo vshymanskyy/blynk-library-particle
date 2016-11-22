@@ -21,8 +21,9 @@
  *
  **************************************************************/
 
-//#define BLYNK_DEBUG       // Uncomment this to see debug prints
-#define BLYNK_PRINT Serial
+#define BLYNK_PRINT Serial  // Set serial output for debug prints
+//#define BLYNK_DEBUG       // Uncomment this to see detailed prints
+
 #include "blynk/blynk.h"
 
 // You should get Auth Token in the Blynk App.
@@ -73,21 +74,4 @@ BLYNK_WRITE(V2) {
 void loop()
 {
     Blynk.run();
-
-    if (ModeBtnPressed()) {
-        Blynk.notify("Mode button was pressed");
-    }
 }
-
-// *** Utility functions
-
-bool ModeBtnPressed() {
-    if(millis() > 5000) {
-        if(BUTTON_GetDebouncedTime(BUTTON1) >= 50) {
-            BUTTON_ResetDebouncedState(BUTTON1);
-            return 1;
-        }
-    }
-    return 0;
-}
-
