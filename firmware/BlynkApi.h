@@ -103,6 +103,10 @@ public:
         virtualWriteBinary(pin, param.getBuffer(), param.getLength());
     }
 
+    void virtualWrite(int pin, const BlynkParamAllocated& param) {
+        virtualWriteBinary(pin, param.getBuffer(), param.getLength());
+    }
+
     /**
      * Requests Server to re-send current values for all widgets.
      */
@@ -118,7 +122,7 @@ public:
      */
     template <typename... Args>
     void syncVirtual(Args... pins) {
-        char mem[8];
+        char mem[BLYNK_MAX_SENDBYTES];
         BlynkParam cmd(mem, 0, sizeof(mem));
         cmd.add("vr");
         cmd.add_multi(pins...);
@@ -281,7 +285,6 @@ protected:
     static millis_time_t getMillis();
     void processCmd(const void* buff, size_t len);
     void sendInfo();
-
 };
 
 

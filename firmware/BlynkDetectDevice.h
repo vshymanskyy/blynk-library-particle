@@ -89,8 +89,8 @@
             #define BLYNK_INFO_CONNECTION  "CC3200"
             #define BLYNK_SEND_CHUNK 64
 
-            #if   defined(ENERGIA_CC3200-LAUNCHXL)
-            #define BLYNK_INFO_DEVICE  "CC32000-LanuchXL"
+            #if   defined(ENERGIA_CC3200_LAUNCHXL) //TODO: This is a bug in Energia IDE
+            #define BLYNK_INFO_DEVICE  "CC32000 LaunchXL"
             #elif defined(ENERGIA_RedBearLab_CC3200)
             #define BLYNK_INFO_DEVICE  "RBL CC3200"
             #elif defined(ENERGIA_RedBearLab_WiFiMini)
@@ -130,7 +130,9 @@
         #elif PLATFORM_ID==103
         #define BLYNK_INFO_DEVICE  "Bluz"
         #else
-        #warning "Cannot detect board type"
+        #if defined(BLYNK_DEBUG_ALL)
+            #warning "Cannot detect board type"
+        #endif
         #define BLYNK_INFO_DEVICE  "Particle"
         #endif
 
@@ -150,7 +152,13 @@
 
     #elif defined(ARDUINO) && defined(TEENSYDUINO)
 
-        #if   defined(__MK20DX256__)
+        #if   defined(__MK66FX1M0__)
+        #define BLYNK_INFO_DEVICE  "Teensy 3.6"
+        #define BLYNK_USE_128_VPINS
+        #elif defined(__MK64FX512__)
+        #define BLYNK_INFO_DEVICE  "Teensy 3.5"
+        #define BLYNK_USE_128_VPINS
+        #elif defined(__MK20DX256__)
         #define BLYNK_INFO_DEVICE  "Teensy 3.2/3.1"
         #define BLYNK_USE_128_VPINS
         #elif   defined(__MK20DX128__)
@@ -269,6 +277,27 @@
         /* ESP32 */
         #elif defined(ARDUINO_ESP32_DEV)
         #define BLYNK_INFO_DEVICE  "ESP32"
+        #elif defined(ARDUINO_ESP320)
+        #define BLYNK_INFO_DEVICE  "SweetPeas ESP320"
+        #elif defined(ARDUINO_NANO32)
+        #define BLYNK_INFO_DEVICE  "ESP32 Nano32"
+        #elif defined(ARDUINO_LoLin32)
+        #define BLYNK_INFO_DEVICE  "LoLin32"
+        #elif defined(ARDUINO_ESPea32)
+        #define BLYNK_INFO_DEVICE  "ESPea32"
+        #elif defined(ARDUINO_QUANTUM)
+        #define BLYNK_INFO_DEVICE  "Noduino Quantum"
+
+        /* STM32 */
+        #elif defined(ARDUINO_ARCH_STM32F1)
+        #define BLYNK_INFO_DEVICE  "STM32F1"
+        #define BLYNK_NO_YIELD
+        #elif defined(ARDUINO_ARCH_STM32F3)
+        #define BLYNK_INFO_DEVICE  "STM32F3"
+        #define BLYNK_NO_YIELD
+        #elif defined(ARDUINO_ARCH_STM32F4)
+        #define BLYNK_INFO_DEVICE  "STM32F4"
+        #define BLYNK_NO_YIELD
 
         /* Digistump */
         #elif defined(ARDUINO_ESP8266_OAK)
@@ -305,19 +334,26 @@
         #define BLYNK_INFO_DEVICE  "Simblee"
         #define BLYNK_USE_128_VPINS
 
+        /* RFduino */
+        #elif defined(__RFduino__)
+        #define BLYNK_INFO_DEVICE  "RFduino"
+        #define BLYNK_USE_128_VPINS
+
         /* Nordic NRF5x */
         #elif defined(ARDUINO_ARCH_NRF5)
         #define BLYNK_INFO_DEVICE  "nRF5"
         #define BLYNK_USE_128_VPINS
 
         #else
-        #warning "Cannot detect board type"
+        #if defined(BLYNK_DEBUG_ALL)
+            #warning "Cannot detect board type"
+        #endif
         #define BLYNK_INFO_DEVICE  "Arduino"
         #endif
 
     #endif
 
-    #ifdef BLYNK_DEBUG
+    #if defined(BLYNK_DEBUG_ALL)
     #pragma message ("BLYNK_INFO_DEVICE=" BLYNK_TOSTRING(BLYNK_INFO_DEVICE))
     #pragma message ("BLYNK_INFO_CPU="    BLYNK_TOSTRING(BLYNK_INFO_CPU))
     #endif

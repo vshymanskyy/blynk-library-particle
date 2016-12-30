@@ -8,74 +8,84 @@
  */
 #include "BlynkDebug.h"
 
-#if defined(__AVR__)
+#if defined(BLYNK_USE_AVR_WDT)
+
+    #include <Arduino.h>
+    #include <avr/wdt.h>
+
+    size_t BlynkFreeRam()
+    {
+        extern int __heap_start, *__brkval;
+        int v;
+        return (int) &v - (__brkval == 0 ? (int) &__heap_start : (int) __brkval);
+    }
+
+    void wdt_init(void) __attribute__((naked)) __attribute__((section(".init3")));
+
+    void wdt_init(void)
+    {
+        MCUSR = 0;
+        wdt_disable();
+
+        return;
+    }
+
+    void BlynkReset()
+    {
+        wdt_enable(WDTO_15MS);
+        delay(50);
+        void(*resetFunc)(void) = 0;
+        resetFunc();
+        for(;;) {} // To make compiler happy
+    }
+
+#elif defined(__AVR__)
 
     #include <Arduino.h>
 
-	size_t BlynkFreeRam()
-	{
-		extern int __heap_start, *__brkval;
-		int v;
-		return (int) &v - (__brkval == 0 ? (int) &__heap_start : (int) __brkval);
-	}
+    size_t BlynkFreeRam()
+    {
+        extern int __heap_start, *__brkval;
+        int v;
+        return (int) &v - (__brkval == 0 ? (int) &__heap_start : (int) __brkval);
+    }
 
-	void BlynkReset()
-	{
-		void(*resetFunc)(void) = 0;
-		resetFunc();
-		for(;;) {} // To make compiler happy
-	}
+    void BlynkReset()
+    {
+        void(*resetFunc)(void) = 0;
+        resetFunc();
+        for(;;) {}
+    }
 
 #elif defined(ESP8266)
 
     #include <Arduino.h>
 
-	size_t BlynkFreeRam()
-	{
-		return ESP.getFreeHeap();
-	}
+    size_t BlynkFreeRam()
+    {
+        return ESP.getFreeHeap();
+    }
 
-	void BlynkReset()
-	{
-		ESP.restart();
-		for(;;) {} // To make compiler happy
-	}
+    void BlynkReset()
+    {
+        ESP.restart();
+        for(;;) {}
+    }
 
-#elif defined(__DUE__) //TODO
+#elif defined(ARDUINO_ARCH_SAMD) || defined(ARDUINO_ARCH_SAM)
 
     #include <Arduino.h>
 
-	size_t BlynkFreeRam()
-	{
-		struct mallinfo mi=mallinfo();
+    size_t BlynkFreeRam()
+    {
+        return 0;
+    }
 
-		char *heapend=sbrk(0);
-		register char * stack_ptr asm("sp");
-/*
-		pConsole->printf("    arena=%d\n",mi.arena);
-		pConsole->printf("  ordblks=%d\n",mi.ordblks);
-		pConsole->printf(" uordblks=%d\n",mi.uordblks);
-		pConsole->printf(" fordblks=%d\n",mi.fordblks);
-		pConsole->printf(" keepcost=%d\n",mi.keepcost);
-
-		pConsole->printf("RAM Start %lx\n", (unsigned long)ramstart);
-		pConsole->printf("Data/Bss end %lx\n", (unsigned long)&_end);
-		pConsole->printf("Heap End %lx\n", (unsigned long)heapend);
-		pConsole->printf("Stack Ptr %lx\n",(unsigned long)stack_ptr);
-		pConsole->printf("RAM End %lx\n", (unsigned long)ramend);
-
-		pConsole->printf("Heap RAM Used: %d\n",mi.uordblks);
-		pConsole->printf("Program RAM Used %d\n",&_end - ramstart);
-		pConsole->printf("Stack RAM Used %d\n",ramend - stack_ptr);
-*/
-		size_t result = stack_ptr - heapend + mi.fordblks;
-		return result;
-	}
-	void BlynkReset()
-	{
-		NVIC_SystemReset();
-		for(;;) {} // To make compiler happy
-	}
+    void BlynkReset()
+    {
+        NVIC_SystemReset();
+        for(;;) {}
+    }
 
 #elif defined (PARTICLE) || defined(SPARK)
 
@@ -92,19 +102,43 @@
         for(;;) {} // To make compiler happy
     }
 
+#elif defined(__STM32F1__) || defined(__STM32F3__)
+
+    #include <Arduino.h>
+    #include <libmaple/nvic.h>
+
+    size_t BlynkFreeRam()
+    {
+        return 0;
+    }
+
+    void BlynkReset()
+    {
+        nvic_sys_reset();
+        for(;;) {}
+    }
+
+// TODO:
+//#elif defined (TEENSYDUINO)
+//#elif defined (__STM32F4__)
+//#elif defined (ARDUINO_ARCH_ARC32)
+//#elif defined (__RFduino__) || defined (__Simblee__)
+
 #else
 
-	#error "Need to implement board-specific utilities"
+    #if defined(BLYNK_DEBUG_ALL)
+        #warning "Need to implement board-specific utilities"
+    #endif
 
-	size_t BlynkFreeRam()
-	{
-		return 0;
-	}
+    size_t BlynkFreeRam()
+    {
+        return 0;
+    }
 
-	void BlynkReset()
-	{
-		for(;;) {} // To make compiler happy
-	}
+    void BlynkReset()
+    {
+        for(;;) {} // To make compiler happy
+    }
 
 #endif
 
