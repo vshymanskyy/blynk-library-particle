@@ -25,6 +25,7 @@
 //#define BLYNK_DEBUG       // Uncomment this to see detailed prints
 
 // Uncomment this, if you want to set network credentials
+//#include "cellular_hal.h"
 //STARTUP(cellular_credentials_set("broadband", "", "", NULL));
 
 // Run "ping blynk-cloud.com", and set Blynk IP to the shown address
