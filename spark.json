@@ -1,6 +1,6 @@
 {
     "name": "blynk",
-    "version": "0.4.3",
+    "version": "0.4.4",
     "author": "Volodymyr Shymanskyy <vshymanskyi@gmail.com>",
     "license": "MIT",
     "description": "Build a smartphone app for your Particle project in minutes. http://blynk.cc"
