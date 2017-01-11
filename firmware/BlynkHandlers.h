@@ -180,8 +180,6 @@
 #define BLYNK_CONNECTED()    void BlynkOnConnected()
 #define BLYNK_DISCONNECTED() void BlynkOnDisconnected()
 
-#define BLYNK_APP_CONNECTED() void BlynkOnAppConnected()
-
 // Advanced functions
 
 #define BLYNK_VAR_INT(name, pin) \
@@ -233,8 +231,17 @@ void BlynkNoOpCbk();
 BLYNK_CONNECTED();
 BLYNK_DISCONNECTED();
 
-BLYNK_APP_CONNECTED();
+// Internal Virtual Pins
+BLYNK_WRITE(InternalPinACON);
+BLYNK_WRITE(InternalPinADIS);
+BLYNK_WRITE(InternalPinRTC);
+BLYNK_WRITE(InternalPinOTA);
 
+// Aliases
+#define BLYNK_APP_CONNECTED()    BLYNK_WRITE(InternalPinACON)
+#define BLYNK_APP_DISCONNECTED() BLYNK_WRITE(InternalPinADIS)
+
+// Regular Virtual Pins
 BLYNK_READ_DEFAULT();
 BLYNK_WRITE_DEFAULT();
 
