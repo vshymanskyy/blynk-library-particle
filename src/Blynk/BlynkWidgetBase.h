@@ -10,7 +10,7 @@
 #ifndef BlynkWidgetBase_h
 #define BlynkWidgetBase_h
 
-#include "BlynkApi.h"
+#include <Blynk/BlynkApi.h>
 
 class BlynkWidgetBase
 {

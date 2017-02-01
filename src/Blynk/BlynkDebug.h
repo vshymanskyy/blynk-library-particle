@@ -11,7 +11,7 @@
 #ifndef BlynkDebug_h
 #define BlynkDebug_h
 
-#include "BlynkConfig.h"
+#include <Blynk/BlynkConfig.h>
 #include <stddef.h>
 #ifdef ESP8266
     extern "C" {

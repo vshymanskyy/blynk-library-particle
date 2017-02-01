@@ -11,7 +11,7 @@
 #ifndef WidgetTable_h
 #define WidgetTable_h
 
-#include "BlynkWidgetBase.h"
+#include <Blynk/BlynkWidgetBase.h>
 
 class WidgetTable
     : public BlynkWidgetBase

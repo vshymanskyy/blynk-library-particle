@@ -11,8 +11,8 @@
 #ifndef BlynkHandlers_h
 #define BlynkHandlers_h
 
-#include "BlynkConfig.h"
-#include "BlynkParam.h"
+#include <Blynk/BlynkConfig.h>
+#include <Blynk/BlynkParam.h>
 
 // Helper macro
 

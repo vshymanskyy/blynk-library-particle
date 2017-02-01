@@ -10,7 +10,7 @@
 #ifndef WidgetMap_h
 #define WidgetMap_h
 
-#include "BlynkWidgetBase.h"
+#include <Blynk/BlynkWidgetBase.h>
 
 class WidgetMap
     : public BlynkWidgetBase

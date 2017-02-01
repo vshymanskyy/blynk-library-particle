@@ -13,7 +13,7 @@
 
 #ifndef BLYNK_NO_FLOAT
 
-#include "BlynkWidgetBase.h"
+#include <Blynk/BlynkWidgetBase.h>
 
 class GpsParam
 {

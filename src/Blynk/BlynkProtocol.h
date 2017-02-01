@@ -13,10 +13,10 @@
 
 #include <string.h>
 #include <stdlib.h>
-#include "BlynkDebug.h"
-#include "BlynkProtocolDefs.h"
-#include "BlynkApi.h"
-#include "BlynkUtility.h"
+#include <Blynk/BlynkDebug.h>
+#include <Blynk/BlynkProtocolDefs.h>
+#include <Blynk/BlynkApi.h>
+#include <utility/BlynkUtility.h>
 
 template <class Transp>
 class BlynkProtocol

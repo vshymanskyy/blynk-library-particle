@@ -11,11 +11,11 @@
 #ifndef BlynkApi_h
 #define BlynkApi_h
 
-#include "BlynkConfig.h"
-#include "BlynkDebug.h"
-#include "BlynkParam.h"
-#include "BlynkHandlers.h"
-#include "BlynkProtocolDefs.h"
+#include <Blynk/BlynkConfig.h>
+#include <Blynk/BlynkDebug.h>
+#include <Blynk/BlynkParam.h>
+#include <Blynk/BlynkHandlers.h>
+#include <Blynk/BlynkProtocolDefs.h>
 
 /**
  * Represents high-level functions of Blynk
