@@ -24,7 +24,7 @@
 #define BLYNK_PRINT Serial  // Set serial output for debug prints
 //#define BLYNK_DEBUG       // Uncomment this to see detailed prints
 
-#include "blynk.h"
+#include <blynk.h>
 
 // You should get Auth Token in the Blynk App.
 // Go to the Project Settings (nut icon).

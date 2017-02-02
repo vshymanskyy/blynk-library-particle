@@ -39,7 +39,7 @@
 // Each ping uses 121 bytes of data.
 #define PARTICLE_KEEPALIVE 20
 
-#include "blynk.h"
+#include <blynk.h>
 
 // You should get Auth Token in the Blynk App.
 // Go to the Project Settings (nut icon).
