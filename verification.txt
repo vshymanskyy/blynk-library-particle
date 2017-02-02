@@ -1,0 +1,7 @@
+
+=== VERIFICATION HOWTO ===
+
+1. Install the Blynk App on your Android/iOS smartphone
+2. Login to Bynk App. If you don't have an account, please create one (specify a correct email)
+3. Create a new project (you should get an email with Auth Token)
+4. Follow this guide: http://docs.blynk.cc/#hardware-set-ups-particle
