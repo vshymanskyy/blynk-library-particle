@@ -1,25 +1,23 @@
-/**************************************************************
- * Blynk is a platform with iOS and Android apps to control
- * Arduino, Raspberry Pi and the likes over the Internet.
- * You can easily build graphic interfaces for all your
- * projects by simply dragging and dropping widgets.
- *
- *   Downloads, docs, tutorials: http://www.blynk.cc
- *   Blynk community:            http://community.blynk.cc
- *   Social groups:              http://www.fb.com/blynkapp
- *                               http://twitter.com/blynk_app
- *
- * Blynk library is licensed under MIT license
- * This example code is in public domain.
- *
- **************************************************************
- *
- * No coding required for direct digital/analog pin operations!
- *
- * WARNING: It is recommended to use SparkCorePolledTimer library
- *          to make periodic actions (similar to SimpleTimer on Arduino).
- *
- **************************************************************/
+/*************************************************************
+  Blynk is a platform with iOS and Android apps to control
+  Arduino, Raspberry Pi and the likes over the Internet.
+  You can easily build graphic interfaces for all your
+  projects by simply dragging and dropping widgets.
+
+    Downloads, docs, tutorials: http://www.blynk.cc
+    Sketch generator:           http://examples.blynk.cc
+    Blynk community:            http://community.blynk.cc
+    Social networks:            http://www.fb.com/blynkapp
+                                http://twitter.com/blynk_app
+
+  Blynk library is licensed under MIT license
+  This example code is in public domain.
+
+ *************************************************************
+
+  No coding required for direct digital/analog pin operations!
+
+ *************************************************************/
 
 #define BLYNK_PRINT Serial  // Set serial output for debug prints
 //#define BLYNK_DEBUG       // Uncomment this to see detailed prints
