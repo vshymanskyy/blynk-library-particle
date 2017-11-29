@@ -37,9 +37,9 @@
 #define BLYNK_TIMEOUT_MS     2000UL
 #endif
 
-// Limit the amount of outgoing commands.
+// Limit the amount of outgoing commands per second.
 #ifndef BLYNK_MSG_LIMIT
-#define BLYNK_MSG_LIMIT      20
+#define BLYNK_MSG_LIMIT      15
 #endif
 
 // Limit the incoming command length.
