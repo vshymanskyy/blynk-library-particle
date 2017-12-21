@@ -37,9 +37,6 @@ public:
         , lastActivityIn(0)
         , lastActivityOut(0)
         , lastHeartbeat(0)
-#ifdef BLYNK_MSG_LIMIT
-        , deltaCmd(0)
-#endif
         , msgIdOut(0)
         , msgIdOutOverride(0)
         , nesting(0)
@@ -72,11 +69,8 @@ public:
     void startSession() {
         conn.connect();
         state = CONNECTING;
-#ifdef BLYNK_MSG_LIMIT
-        deltaCmd = 1000;
-#endif
         msgIdOut = 0;
-        lastHeartbeat = lastActivityIn = lastActivityOut = BlynkMillis(); // TODO: - 5005UL
+        lastHeartbeat = lastActivityIn = lastActivityOut = (BlynkMillis() - 5000UL);
     }
 
     void sendCmd(uint8_t cmd, uint16_t id = 0, const void* data = NULL, size_t length = 0, const void* data2 = NULL, size_t length2 = 0);
@@ -95,6 +89,7 @@ private:
 protected:
     void begin(const char* auth) {
         this->authkey = auth;
+        lastHeartbeat = lastActivityIn = lastActivityOut = (BlynkMillis() - 5000UL);
 
 #if defined(BLYNK_NO_FANCY_LOGO)
         BLYNK_LOG1(BLYNK_F("Blynk v" BLYNK_VERSION " on " BLYNK_INFO_DEVICE));
@@ -133,9 +128,6 @@ private:
         millis_time_t lastHeartbeat;
         millis_time_t lastLogin;
     };
-#ifdef BLYNK_MSG_LIMIT
-    millis_time_t deltaCmd;
-#endif
     uint16_t msgIdOut;
     uint16_t msgIdOutOverride;
     uint8_t  nesting;
@@ -148,22 +140,20 @@ bool BlynkProtocol<Transp>::run(bool avail)
 {
     BLYNK_RUN_YIELD();
 
+    if (state == DISCONNECTED) {
+        return false;
+    }
+
     // Detect nesting
     BlynkHelperAutoInc guard(nesting);
     if (msgIdOutOverride || nesting > 2) {
-#ifdef BLYNK_DEBUG
+#ifdef BLYNK_DEBUG_ALL
       BLYNK_LOG1(BLYNK_F("Nested run() skipped"));
 #endif
       return true;
     }
 
-    if (state == DISCONNECTED) {
-        return false;
-    }
-
-    const bool tconn = conn.connected();
-
-    if (tconn) {
+    if (conn.connected()) {
         while (avail || conn.available() > 0) {
             //BLYNK_LOG2(BLYNK_F("Available: "), conn.available());
             //const unsigned long t = micros();
@@ -182,6 +172,9 @@ bool BlynkProtocol<Transp>::run(bool avail)
     }
 
     const millis_time_t t = BlynkMillis();
+
+    // Update connection status after running commands
+    const bool tconn = conn.connected();
 
     if (state == CONNECTED) {
         if (!tconn) {
@@ -224,9 +217,6 @@ bool BlynkProtocol<Transp>::run(bool avail)
                 return false;
             }
 
-#ifdef BLYNK_MSG_LIMIT
-            deltaCmd = 1000;
-#endif
             msgIdOut = 1;
             sendCmd(BLYNK_CMD_LOGIN, 1, authkey, strlen(authkey));
             lastLogin = lastActivityOut;
@@ -300,7 +290,7 @@ bool BlynkProtocol<Transp>::processInput(void)
 
     uint8_t inputBuffer[hdr.length+1]; // Add 1 to zero-terminate
     if (hdr.length != conn.read(inputBuffer, hdr.length)) {
-#ifdef DEBUG
+#ifdef BLYNK_DEBUG
         BLYNK_LOG1(BLYNK_F("Can't read body"));
 #endif
         return false;
@@ -354,8 +344,8 @@ bool BlynkProtocol<Transp>::processInput(void)
         BLYNK_LOG4(BLYNK_F("Redirecting to "), redir_serv, ':', redir_port);
         conn.disconnect();
         conn.begin(redir_serv, redir_port);
-        lastLogin = lastActivityIn - 5000L;  // Reconnect immediately
         state = CONNECTING;
+        lastHeartbeat = lastActivityIn = lastActivityOut = (BlynkMillis() - 5000UL);
     } break;
     case BLYNK_CMD_HARDWARE:
     case BLYNK_CMD_BRIDGE: {
@@ -383,7 +373,7 @@ bool BlynkProtocol<Transp>::processInput(void)
         case BLYNK_INT_OTA:  BlynkWidgetWriteInternalPinOTA(req, param2);    break;
         case BLYNK_INT_ACON: BlynkWidgetWriteInternalPinACON(req, param2);   break;
         case BLYNK_INT_ADIS: BlynkWidgetWriteInternalPinADIS(req, param2);   break;
-#ifdef DEBUG
+#ifdef BLYNK_DEBUG
         default:             BLYNK_LOG2(BLYNK_F("Invalid internal cmd:"), param.asStr());
 #endif
         }
@@ -436,15 +426,15 @@ int BlynkProtocol<Transp>::readHeader(BlynkHeader& hdr)
 template <class Transp>
 void BlynkProtocol<Transp>::sendCmd(uint8_t cmd, uint16_t id, const void* data, size_t length, const void* data2, size_t length2)
 {
-    if (0 == id) {
-        id = getNextMsgId();
-    }
-
     if (!conn.connected() || (cmd != BLYNK_CMD_RESPONSE && cmd != BLYNK_CMD_PING && cmd != BLYNK_CMD_LOGIN && state != CONNECTED) ) {
-#ifdef BLYNK_DEBUG
+#ifdef BLYNK_DEBUG_ALL
         BLYNK_LOG2(BLYNK_F("Cmd skipped:"), cmd);
 #endif
         return;
+    }
+
+    if (0 == id) {
+        id = getNextMsgId();
     }
 
 #if defined(BLYNK_MSG_LIMIT) && BLYNK_MSG_LIMIT > 0
@@ -452,13 +442,15 @@ void BlynkProtocol<Transp>::sendCmd(uint8_t cmd, uint16_t id, const void* data, 
         const millis_time_t allowed_time = BlynkMax(lastActivityOut, lastActivityIn) + 1000/BLYNK_MSG_LIMIT;
         long wait_time = allowed_time - BlynkMillis();
         if (wait_time >= 0) {
-#ifdef BLYNK_DEBUG
+#ifdef BLYNK_DEBUG_ALL
             BLYNK_LOG2(BLYNK_F("Waiting:"), wait_time);
 #endif
             while (wait_time >= 0) {
                 run();
                 wait_time = allowed_time - BlynkMillis();
             }
+        } else if (nesting == 0) {
+            run();
         }
     }
 #endif
@@ -467,7 +459,7 @@ void BlynkProtocol<Transp>::sendCmd(uint8_t cmd, uint16_t id, const void* data, 
                                (data  ? length  : 0) +
                                (data2 ? length2 : 0);
 
-#if defined(BLYNK_SEND_ATOMIC) || defined(ESP8266) || defined(SPARK) || defined(PARTICLE) || defined(ENERGIA)
+#if defined(BLYNK_SEND_ATOMIC) || defined(ESP8266) || defined(ESP32) || defined(SPARK) || defined(PARTICLE) || defined(ENERGIA)
     // Those have more RAM and like single write at a time...
 
     uint8_t buff[full_length];
