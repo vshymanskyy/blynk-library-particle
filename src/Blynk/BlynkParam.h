@@ -17,6 +17,7 @@
 #include <Blynk/BlynkDebug.h>
 
 #define BLYNK_PARAM_KV(k, v) k "\0" v "\0"
+#define BLYNK_PARAM_PLACEHOLDER_64 "PlaceholderPlaceholderPlaceholderPlaceholderPlaceholderPlaceholder"
 
 class BlynkParam
 {
@@ -57,7 +58,7 @@ public:
 
 public:
     explicit
-    BlynkParam(void* addr, size_t length)
+    BlynkParam(const void* addr, size_t length)
         : buff((char*)addr), len(length), buff_size(length)
     {}
 

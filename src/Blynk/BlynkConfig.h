@@ -25,7 +25,7 @@
  * Professional settings
  ***************************************************/
 // Library version.
-#define BLYNK_VERSION        "0.5.3"
+#define BLYNK_VERSION        "0.5.4"
 
 // Heartbeat period in seconds.
 #ifndef BLYNK_HEARTBEAT
@@ -34,7 +34,7 @@
 
 // Network timeout in milliseconds.
 #ifndef BLYNK_TIMEOUT_MS
-#define BLYNK_TIMEOUT_MS     2000UL
+#define BLYNK_TIMEOUT_MS     3000UL
 #endif
 
 // Limit the amount of outgoing commands per second.
