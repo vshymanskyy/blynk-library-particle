@@ -45,6 +45,7 @@ __________
 ### Implementations for other platforms
 * [Arduino](https://github.com/blynkkk/blynk-library)
 * [Node.js + Espruino](https://github.com/vshymanskyy/blynk-library-js)
+* [Lua, NodeMCU](https://github.com/vshymanskyy/blynk-library-lua)
 * [MicroPython WiPy](https://github.com/wipy/wipy/tree/master/lib/blynk)
 * [OpenWrt](https://github.com/vshymanskyy/blynk-library-openwrt)
 * [MBED](https://developer.mbed.org/users/vshymanskyy/code/Blynk/)
