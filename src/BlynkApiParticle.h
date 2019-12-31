@@ -27,15 +27,7 @@ BLYNK_FORCE_INLINE
 void BlynkApi<Proto>::sendInfo()
 {
     static const char profile[] BLYNK_PROGMEM = "blnkinf\0"
-#ifdef BOARD_FIRMWARE_VERSION
-        BLYNK_PARAM_KV("ver"    , BOARD_FIRMWARE_VERSION)
-        BLYNK_PARAM_KV("blynk"  , BLYNK_VERSION)
-#else
         BLYNK_PARAM_KV("ver"    , BLYNK_VERSION)
-#endif
-#ifdef BOARD_TEMPLATE_ID
-        BLYNK_PARAM_KV("tmpl"   , BOARD_TEMPLATE_ID)
-#endif
         BLYNK_PARAM_KV("h-beat" , BLYNK_TOSTRING(BLYNK_HEARTBEAT))
         BLYNK_PARAM_KV("buff-in", BLYNK_TOSTRING(BLYNK_MAX_READBYTES))
 #ifdef BLYNK_INFO_DEVICE
@@ -47,17 +39,34 @@ void BlynkApi<Proto>::sendInfo()
 #ifdef BLYNK_INFO_CONNECTION
         BLYNK_PARAM_KV("con"    , BLYNK_INFO_CONNECTION)
 #endif
+#ifdef BOARD_FIRMWARE_TYPE
+        BLYNK_PARAM_KV("fw-type", BOARD_FIRMWARE_TYPE)
+#endif
+#ifdef BOARD_FIRMWARE_VERSION
+        BLYNK_PARAM_KV("fw"     , BOARD_FIRMWARE_VERSION)
+#endif
         BLYNK_PARAM_KV("build"  , __DATE__ " " __TIME__)
         "\0"
     ;
     const size_t profile_len = sizeof(profile)-8-2;
 
+    char mem_dyn[64];
+    BlynkParam profile_dyn(mem_dyn, 0, sizeof(mem_dyn));
+#ifdef BOARD_TEMPLATE_ID
+    {
+        const char* tmpl = BOARD_TEMPLATE_ID;
+        if (tmpl && strlen(tmpl)) {
+            profile_dyn.add_key("tmpl", tmpl);
+        }
+    }
+#endif
+
 #ifdef BLYNK_HAS_PROGMEM
     char mem[profile_len];
     memcpy_P(mem, profile+8, profile_len);
-    static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_INTERNAL, 0, mem, profile_len);
+    static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_INTERNAL, 0, mem, profile_len, profile_dyn.getBuffer(), profile_dyn.getLength());
 #else
-    static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_INTERNAL, 0, profile+8, profile_len);
+    static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_INTERNAL, 0, profile+8, profile_len, profile_dyn.getBuffer(), profile_dyn.getLength());
 #endif
     return;
 }
@@ -90,7 +99,7 @@ void BlynkApi<Proto>::processCmd(const void* buff, size_t len)
     if (++it >= param.end())
         return;
 
-    uint8_t pin = BLYNK_DECODE_PIN(it);
+    const uint8_t pin = BLYNK_DECODE_PIN(it);
 
     switch(cmd16) {
 
@@ -98,7 +107,7 @@ void BlynkApi<Proto>::processCmd(const void* buff, size_t len)
 
     case BLYNK_HW_PM: {
         while (it < param.end()) {
-            pin = BLYNK_DECODE_PIN(it);
+            const uint8_t pin = BLYNK_DECODE_PIN(it);
             ++it;
             if (!strcmp(it.asStr(), "in")) {
                 pinMode(pin, INPUT);
