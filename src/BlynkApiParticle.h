@@ -14,14 +14,6 @@
 #include "Blynk/BlynkApi.h"
 #include "Particle.h"
 
-#ifdef BLYNK_NO_INFO
-
-template<class Proto>
-BLYNK_FORCE_INLINE
-void BlynkApi<Proto>::sendInfo() {}
-
-#else
-
 template<class Proto>
 BLYNK_FORCE_INLINE
 void BlynkApi<Proto>::sendInfo()
@@ -39,11 +31,11 @@ void BlynkApi<Proto>::sendInfo()
 #ifdef BLYNK_INFO_CONNECTION
         BLYNK_PARAM_KV("con"    , BLYNK_INFO_CONNECTION)
 #endif
-#ifdef BOARD_FIRMWARE_TYPE
-        BLYNK_PARAM_KV("fw-type", BOARD_FIRMWARE_TYPE)
+#ifdef BLYNK_FIRMWARE_TYPE
+        BLYNK_PARAM_KV("fw-type", BLYNK_FIRMWARE_TYPE)
 #endif
-#ifdef BOARD_FIRMWARE_VERSION
-        BLYNK_PARAM_KV("fw"     , BOARD_FIRMWARE_VERSION)
+#ifdef BLYNK_FIRMWARE_VERSION
+        BLYNK_PARAM_KV("fw"     , BLYNK_FIRMWARE_VERSION)
 #endif
         BLYNK_PARAM_KV("build"  , __DATE__ " " __TIME__)
         "\0"
@@ -52,9 +44,9 @@ void BlynkApi<Proto>::sendInfo()
 
     char mem_dyn[64];
     BlynkParam profile_dyn(mem_dyn, 0, sizeof(mem_dyn));
-#ifdef BOARD_TEMPLATE_ID
+#ifdef BLYNK_TEMPLATE_ID
     {
-        const char* tmpl = BOARD_TEMPLATE_ID;
+        const char* tmpl = BLYNK_TEMPLATE_ID;
         if (tmpl && strlen(tmpl)) {
             profile_dyn.add_key("tmpl", tmpl);
         }
@@ -70,8 +62,6 @@ void BlynkApi<Proto>::sendInfo()
 #endif
     return;
 }
-
-#endif
 
 
 // Check if analog pins can be referenced by name on this device
@@ -173,25 +163,13 @@ void BlynkApi<Proto>::processCmd(const void* buff, size_t len)
 #endif
 
     case BLYNK_HW_VR: {
-        BlynkReq req = { pin };
-        WidgetReadHandler handler = GetReadHandler(pin);
-        if (handler && (handler != BlynkWidgetRead)) {
-            handler(req);
-        } else {
-            BlynkWidgetReadDefault(req);
-        }
+        callReadHandler(pin);
     } break;
     case BLYNK_HW_VW: {
         ++it;
         char* start = (char*)it.asStr();
         BlynkParam param2(start, len - (start - (char*)buff));
-        BlynkReq req = { pin };
-        WidgetWriteHandler handler = GetWriteHandler(pin);
-        if (handler && (handler != BlynkWidgetWrite)) {
-            handler(req, param2);
-        } else {
-            BlynkWidgetWriteDefault(req, param2);
-        }
+        callWriteHandler(pin, param2);
     } break;
     default:
         BLYNK_LOG2(BLYNK_F("Invalid HW cmd: "), cmd);

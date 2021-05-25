@@ -22,6 +22,10 @@
 #define BLYNK_PRINT Serial  // Set serial output for debug prints
 //#define BLYNK_DEBUG       // Uncomment this to see detailed prints
 
+/* Fill-in your Template ID (only if using Blynk.Cloud) */
+//#define BLYNK_TEMPLATE_ID   "YourTemplateID"
+
+
 // Uncomment this, if you want to set network credentials
 //#include "cellular_hal.h"
 //STARTUP(cellular_credentials_set("broadband", "", "", NULL));
