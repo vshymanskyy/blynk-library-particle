@@ -14,7 +14,7 @@ If you like **Blynk** - give it a star, or fork it and contribute!
 [![GitHub forks](https://img.shields.io/github/forks/blynkkk/blynk-library.svg?style=social&label=Fork)](https://github.com/blynkkk/blynk-library/network)
 __________
 
-### Blynk is **the most popular Internet of Things platform** for connecting any hardware to the cloud, designing apps to control them, and managing your deployed products at scale. 
+### Blynk is a unique IoT platform for connecting any hardware to the cloud, designing apps to control them, and managing your deployed products at scale.
 
 - With Blynk Library you can connect **over 400 hardware models** (including ESP8266, ESP32, NodeMCU, all Arduinos, Raspberry Pi, Particle, Texas Instruments, etc.)to the Blynk Cloud.
 Full list of supported hardware can be found [here](https://github.com/blynkkk/blynkkk.github.io/blob/master/SupportedHardware.md).
@@ -23,7 +23,7 @@ Full list of supported hardware can be found [here](https://github.com/blynkkk/b
 
 - Hardware can connect to Blynk Cloud (open-source server) over the Internet using hardware connectivity available on your board (like ESP32), or with the use of various shields (Ethernet, WiFi, GSM, LTE, etc). Blynk Cloud is available for every user of Blynk **for free**. Direct connection over Bluetooth is also possible. 
 
-![Blynk Banner](https://github.com/blynkkk/blynkkk.github.io/blob/master/images/GithubBanner.jpg)
+![Blynk Banner](https://github.com/blynkkk/blynkkk.github.io/raw/master/images/GithubBanner.jpg)
 
 ## Downloads
 
@@ -33,16 +33,12 @@ Full list of supported hardware can be found [here](https://github.com/blynkkk/b
 [<img src="https://cdn.rawgit.com/simple-icons/simple-icons/develop/icons/googleplay.svg" width="18" height="18" /> Google Play](https://play.google.com/store/apps/details?id=cloud.blynk) | 
 [<img src="https://cdn.rawgit.com/simple-icons/simple-icons/develop/icons/apple.svg" width="18" height="18" /> App Store](https://apps.apple.com/us/app/blynk-iot/id1559317868)**
 
-## Quickstart: Arduino + Ethernet shield
+## Quickstart: Particle Gen2 / Gen3
 
 * Download the Blynk app ([App Store](https://apps.apple.com/us/app/blynk-iot/id1559317868), [Google Play](https://play.google.com/store/apps/details?id=cloud.blynk))
 * Get the Auth Token from the app
-* Import this library to Arduino IDE. Guide [here](http://arduino.cc/en/guide/libraries)
-* In Arduino IDE, select File -> Examples -> Blynk -> Boards_Ethernet -> Arduino_Ethernet
-* Update Auth Token in the sketch and upload it to Arduino
-* Connect your Arduino with Ethernet shield to the internet
-
-When you are connected - check the included examples on how to use different types of connections (transports) and explore Blynk features. You can combine any example for your hardware + transport + features.
+* Import this library to Particle Build IDE.
+* Update Auth Token in the example sketch and upload it to your device
 
 ## Supported boards, Ethernet, WiFi, Bluetooth, GSM, Serial, USB...
 
@@ -51,7 +47,7 @@ Check out our Examples Browser: http://examples.blynk.cc
 
 ## Documentation and other helpful links
 
-[Full Blynk Documentation](http://docs.blynk.cc/#blynk-firmware) - a complete guide on Blynk features  
+[Full Blynk Documentation](https://docs.blynk.io) - a complete guide on Blynk features  
 [Community (Forum)](http://community.blynk.cc) - join a 500,000 Blynk community to ask questions and share ideas  
 [Help Center](http://help.blynk.cc) - helpful articles on various Blynk aspects  
 [Code Examples Browser](http://examples.blynk.cc) - browse examples to explore Blynk possibilities  
@@ -71,7 +67,7 @@ Check out our Examples Browser: http://examples.blynk.cc
 ## Libraries by community
 * [Node.js, Espruino, Browsers](https://github.com/vshymanskyy/blynk-library-js)
 * [Python, MicroPython](https://github.com/vshymanskyy/blynk-library-python)
-* [Particle](https://github.com/vshymanskyy/blynk-library-spark)
+* [Arduino](https://github.com/blynkkk/blynk-library)
 * [Lua, OpenWrt, NodeMCU](https://github.com/vshymanskyy/blynk-library-lua)
 * [OpenWrt packages](https://github.com/vshymanskyy/blynk-library-openwrt)
 * [MBED](https://developer.mbed.org/users/vshymanskyy/code/Blynk/)
