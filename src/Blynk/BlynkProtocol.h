@@ -102,6 +102,8 @@ public:
 #endif
     }
 
+    uint16_t getNextMsgId();
+
 private:
 
     void internalReconnect() {
@@ -111,7 +113,6 @@ private:
     }
 
     int readHeader(BlynkHeader& hdr);
-    uint16_t getNextMsgId();
 
 protected:
     void begin(const char* auth) {
@@ -138,6 +139,7 @@ private:
     uint16_t msgIdOut;
     uint16_t msgIdOutOverride;
     uint8_t  nesting;
+    BLYNK_MUTEX_DECL(mutex);
 protected:
     BlynkState state;
 };
@@ -448,10 +450,6 @@ void BlynkProtocol<Transp>::sendCmd(uint8_t cmd, uint16_t id, const void* data, 
         return;
     }
 
-    if (0 == id) {
-        id = getNextMsgId();
-    }
-
 #if defined(BLYNK_MSG_LIMIT) && BLYNK_MSG_LIMIT > 0
     if (cmd >= BLYNK_CMD_BRIDGE && cmd <= BLYNK_CMD_HARDWARE) {
         const millis_time_t allowed_time = BlynkMax(lastActivityOut, lastActivityIn) + 1000/BLYNK_MSG_LIMIT;
@@ -469,6 +467,14 @@ void BlynkProtocol<Transp>::sendCmd(uint8_t cmd, uint16_t id, const void* data, 
         }
     }
 #endif
+
+    BlynkApi< BlynkProtocol<Transp> >::sendPendingGroup();
+
+    BLYNK_MUTEX_GUARD(mutex);
+
+    if (0 == id) {
+        id = getNextMsgId();
+    }
 
     const size_t full_length = (sizeof(BlynkHeader)) +
                                (data  ? length  : 0) +

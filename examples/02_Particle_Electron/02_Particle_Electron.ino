@@ -22,9 +22,10 @@
 #define BLYNK_PRINT Serial  // Set serial output for debug prints
 //#define BLYNK_DEBUG       // Uncomment this to see detailed prints
 
-/* Fill-in your Template ID (only if using Blynk.Cloud) */
-//#define BLYNK_TEMPLATE_ID   "YourTemplateID"
-
+/* Fill in information from Blynk Device Info here */
+//#define BLYNK_TEMPLATE_ID           "TMPxxxxxx"
+//#define BLYNK_TEMPLATE_NAME         "Device"
+//#define BLYNK_AUTH_TOKEN            "YourAuthToken"
 
 // Uncomment this, if you want to set network credentials
 //#include "cellular_hal.h"
@@ -43,14 +44,10 @@
 
 #include <blynk.h>
 
-// You should get Auth Token in the Blynk App.
-// Go to the Project Settings (nut icon).
-char auth[] = "YourAuthToken";
-
 void setup() {
   Serial.begin(9600);
   Particle.keepAlive(PARTICLE_KEEPALIVE);
-  Blynk.begin(auth, BLYNK_IP);
+  Blynk.begin(BLYNK_AUTH_TOKEN, BLYNK_IP);
 }
 
 void loop() {

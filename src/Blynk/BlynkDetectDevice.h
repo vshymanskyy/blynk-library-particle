@@ -11,26 +11,7 @@
 #ifndef BlynkDetectDevice_h
 #define BlynkDetectDevice_h
 
-// General defines
-
-#define BLYNK_NEWLINE "\r\n"
-
-#define BLYNK_CONCAT(a, b) a ## b
-#define BLYNK_CONCAT2(a, b) BLYNK_CONCAT(a, b)
-
-#define BLYNK_STRINGIFY(x) #x
-#define BLYNK_TOSTRING(x) BLYNK_STRINGIFY(x)
-
-#define BLYNK_COUNT_OF(x) ((sizeof(x)/sizeof(0[x])) / ((size_t)(!(sizeof(x) % sizeof(0[x])))))
-
-#define BLYNK_ATTR_PACKED __attribute__ ((__packed__))
-#define BLYNK_NORETURN __attribute__ ((noreturn))
-#define BLYNK_UNUSED __attribute__((__unused__))
-#define BLYNK_DEPRECATED __attribute__ ((deprecated))
-#define BLYNK_CONSTRUCTOR __attribute__((constructor))
-
-// Causes problems on some platforms
-#define BLYNK_FORCE_INLINE inline //__attribute__((always_inline))
+#include <Blynk/BlynkHelpers.h>
 
 #ifndef BLYNK_INFO_CPU
 
@@ -232,13 +213,23 @@
 
     #elif defined(ARDUINO)
 
-        #if defined(ARDUINO_ARCH_SAMD) || defined(ESP32) || defined(ESP8266)
+        #if defined(ARDUINO_ARCH_SAMD) || \
+            defined(ESP32) || defined(ESP8266) || \
+            defined(ARDUINO_ARCH_RP2040) || \
+            defined(ARDUINO_ARCH_NRF52840) || \
+            defined(ARDUINO_ARCH_RENESAS)
+
             #define BLYNK_USE_128_VPINS
             #define BLYNK_BUFFERS_SIZE 1024
         #endif
 
+        #if defined(ESP32)
+            #define BLYNK_NO_ANALOG_PINS
+        #endif
+
         #if defined(ARDUINO_ARCH_AVR)
             #define BLYNK_USE_INTERNAL_ATOLL
+            #define BLYNK_MAX_TIMERS 8
         #endif
 
         #if defined(ARDUINO_ARCH_SAMD)
@@ -292,6 +283,7 @@
         /* Arduino megaAVR */
         #elif defined(ARDUINO_AVR_UNO_WIFI_REV2)
         #define BLYNK_INFO_DEVICE  "Arduino UNO WiFi Rev2"
+        #define BLYNK_USE_INTERNAL_ATOLL
 
         /* Arduino SAM */
         #elif defined(ARDUINO_SAM_DUE)
@@ -318,6 +310,27 @@
         #define BLYNK_INFO_DEVICE  "MKR WiFi 1010"
         #elif defined(ARDUINO_SAMD_MKRVIDOR4000)
         #define BLYNK_INFO_DEVICE  "MKR Vidor 4000"
+        #elif defined(ARDUINO_SAMD_NANO_33_IOT)
+        #define BLYNK_INFO_DEVICE  "Nano 33 IoT"
+        #elif defined(TARGET_ARDUINO_NANO33BLE) || defined(ARDUINO_ARDUINO_NANO33BLE) || defined(ARDUINO_NANO33BLE)
+        #define BLYNK_INFO_DEVICE  "Nano 33 BLE"
+
+        /* Arduino RA */
+        #elif defined(ARDUINO_MINIMA)
+        #define BLYNK_INFO_DEVICE  "UNO R4 Minima"
+        #elif defined(ARDUINO_UNOWIFIR4)
+        #define BLYNK_INFO_DEVICE  "UNO R4 WiFi"
+        #elif defined(ARDUINO_PORTENTA_C33)
+        #define BLYNK_INFO_DEVICE  "Portenta C33"
+        #define BLYNK_USE_INTERNAL_DTOSTRF
+
+        /* RapsberryPi */
+        #elif defined(ARDUINO_RASPBERRY_PI_PICO_W)
+        #define BLYNK_INFO_DEVICE  "RPi Pico W"
+        #elif defined(ARDUINO_RASPBERRY_PI_PICO)
+        #define BLYNK_INFO_DEVICE  "RPi Pico"
+        #elif defined(ARDUINO_ARCH_RP2040)
+        #define BLYNK_INFO_DEVICE  "RP2040"
 
         /* Intel */
         #elif defined(ARDUINO_GALILEO)
@@ -362,12 +375,15 @@
         #define BLYNK_INFO_DEVICE  "ESP8266"
 
         /* ESP32 */
-        #elif defined(ARDUINO_ESP32C3_DEV)
-        #define BLYNK_INFO_DEVICE  "ESP32C3"
-        #define BLYNK_NO_ANALOG_PINS
-        #elif defined(ARDUINO_ESP32S2_DEV)
-        #define BLYNK_INFO_DEVICE  "ESP32S2"
-        #elif defined(ARDUINO_ARCH_ESP32)
+        #elif defined(ARDUINO_ESP32C3_DEV) || defined(CONFIG_IDF_TARGET_ESP32C3)
+        #define BLYNK_INFO_DEVICE  "ESP32-C3"
+        #elif defined(ARDUINO_ESP32C6_DEV) || defined(CONFIG_IDF_TARGET_ESP32C6)
+        #define BLYNK_INFO_DEVICE  "ESP32-C6"
+        #elif defined(ARDUINO_ESP32S3_DEV) || defined(CONFIG_IDF_TARGET_ESP32S3)
+        #define BLYNK_INFO_DEVICE  "ESP32-S3"
+        #elif defined(ARDUINO_ESP32S2_DEV) || defined(CONFIG_IDF_TARGET_ESP32S2)
+        #define BLYNK_INFO_DEVICE  "ESP32-S2"
+        #elif defined(ARDUINO_ARCH_ESP32)  || defined(CONFIG_IDF_TARGET_ESP32)
         #define BLYNK_INFO_DEVICE  "ESP32"
 
         /* STM32 */

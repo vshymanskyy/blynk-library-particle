@@ -22,15 +22,12 @@
 #define BLYNK_PRINT Serial  // Set serial output for debug prints
 //#define BLYNK_DEBUG       // Uncomment this to see detailed prints
 
-/* Fill-in your Template ID (only if using Blynk.Cloud) */
-//#define BLYNK_TEMPLATE_ID   "YourTemplateID"
-
+/* Fill in information from Blynk Device Info here */
+//#define BLYNK_TEMPLATE_ID           "TMPxxxxxx"
+//#define BLYNK_TEMPLATE_NAME         "Device"
+//#define BLYNK_AUTH_TOKEN            "YourAuthToken"
 
 #include <blynk.h>
-
-// You should get Auth Token in the Blynk App.
-// Go to the Project Settings (nut icon).
-char auth[] = "YourAuthToken";
 
 // Attach a Button widget (mode: Switch) to the Digital pin 7 - and control the built-in blue led.
 // Attach a Graph widget to Analog pin 1
@@ -41,22 +38,16 @@ void setup()
     Serial.begin(9600);
     delay(5000); // Allow board to settle
 
-    Blynk.begin(auth);
+    Blynk.begin(BLYNK_AUTH_TOKEN);
 }
 
 // Attach a Button widget (mode: Push) to the Virtual pin 1 - and send sweet tweets!
 BLYNK_WRITE(V1) {
     if (param.asInt() == 1) { // On button down...
-        // Tweeting!
-        // Note:
-        //   We allow 1 tweet per minute for now.
-        //   Twitter doesn't allow identical subsequent messages.
-        Blynk.tweet("My Particle project is tweeting using @blynk_app and it’s awesome!\n @Particle #IoT #blynk");
-
         // Pushing notification to the app!
         // Note:
         //   We allow 1 notification per minute for now.
-        Blynk.notify("You pressed the button and I know it ;)");
+        Blynk.logEvent("", "You pressed the button and I know it ;)");
     }
 }
 
