@@ -21,6 +21,7 @@
     #define BLYNK_USE_STREAM_CLASS
 #elif defined(SPARK) || defined(PARTICLE)
     #define BLYNK_USE_STREAM_CLASS
+    
 #endif
 
 #include <Blynk/BlynkWidgetBase.h>
@@ -28,6 +29,9 @@
 
 #ifdef BLYNK_USE_STREAM_CLASS
     #include <Stream.h>
+    #define BLYNK_STREAM_CLASS_OVERRIDE override
+#else
+    #define BLYNK_STREAM_CLASS_OVERRIDE
 #endif
 
 class WidgetTerminal
@@ -48,7 +52,7 @@ public:
      * Writing
      */
 
-    virtual size_t write(uint8_t byte) {
+    virtual size_t write(uint8_t byte) BLYNK_STREAM_CLASS_OVERRIDE {
         mOutBuf[mOutQty++] = byte;
         if (byte == '\n' && Blynk.connected()) {
             flush();
@@ -59,7 +63,7 @@ public:
         return 1;
     }
 
-    virtual void flush() {
+    virtual void flush() BLYNK_STREAM_CLASS_OVERRIDE {
         if (mOutQty) {
             Blynk.virtualWriteBinary(mPin, mOutBuf, mOutQty);
             mOutQty = 0;
@@ -70,9 +74,9 @@ public:
      * Reading
      */
 
-    virtual int read()      { return mRxBuff.readable() ? mRxBuff.get() : -1;  }
-    virtual int available() { return mRxBuff.size(); }
-    virtual int peek()      { return mRxBuff.readable() ? mRxBuff.peek() : -1; }
+    virtual int read()      BLYNK_STREAM_CLASS_OVERRIDE { return mRxBuff.readable() ? mRxBuff.get() : -1;  }
+    virtual int available() BLYNK_STREAM_CLASS_OVERRIDE { return mRxBuff.size(); }
+    virtual int peek()      BLYNK_STREAM_CLASS_OVERRIDE { return mRxBuff.readable() ? mRxBuff.peek() : -1; }
 
     void process(const BlynkParam& param) {
         mRxBuff.put((uint8_t*)param.getBuffer(), param.getLength());
@@ -108,23 +112,18 @@ public:
 
     using Stream::write;
 
-    virtual size_t write(const void* buff, size_t len) {
-        return write((char*)buff, len);
-    }
-
 #else
 
-    virtual size_t write(const void* buff, size_t len) {
-        uint8_t* buf = (uint8_t*)buff;
+    virtual size_t write(const uint8_t* buff, size_t len) {
         size_t left = len;
         while (left--) {
-            write(*buf++);
+            write(*buff++);
         }
         return len;
     }
 
     virtual size_t write(const char* str) {
-        return write(str, strlen(str));
+        return write((const uint8_t*)str, strlen(str));
     }
 
 #endif

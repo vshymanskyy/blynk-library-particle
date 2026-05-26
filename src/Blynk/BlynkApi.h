@@ -50,6 +50,14 @@
     #include <Blynk/BlynkEveryN.h>
 #endif
 
+#if (BLYNK_TIMEOUT_MS < 1000 || BLYNK_TIMEOUT_MS > 10000)
+    #error "BLYNK_TIMEOUT_MS should be 1000..10000 milliseconds"
+#endif
+
+#if (BLYNK_HEARTBEAT < 10 || BLYNK_HEARTBEAT > 3600)
+    #error "BLYNK_HEARTBEAT should be 10..3600 seconds"
+#endif
+
 /**
  * Represents high-level functions of Blynk
  */
@@ -181,15 +189,6 @@ public:
         }
     }
 
-    void callReadHandler(BlynkReq& req) {
-        WidgetReadHandler handler = GetReadHandler(req.pin);
-        if (handler && (handler != BlynkWidgetRead)) {
-            handler(req);
-        } else {
-            BlynkWidgetReadDefault(req);
-        }
-    }
-
     /**
      * Requests Server to re-send current values for all widgets.
      */
@@ -226,8 +225,6 @@ public:
     /**
      * Sets property of a Widget
      *
-     * @experimental
-     *
      * @param pin      Virtual Pin number
      * @param property Property name ("label", "labels", "color", ...)
      * @param value    Property value
@@ -260,6 +257,22 @@ public:
         static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_PROPERTY, 0, cmd.getBuffer(), cmd.getLength(), param.getBuffer(), param.getLength()-1);
     }
 
+    /**
+     * Sets the value of device Metadata field
+     *
+     * @param field    Metadata field name
+     * @param value    Metadata value
+     */
+    template <typename T, typename T2>
+    void setMetadata(const T& field, const T2& value) {
+        static_cast<Proto*>(this)->sendInternal("meta", "set", field, value);
+    }
+
+    /**
+     * Logs a device event
+     *
+     * @param event_name    Event name
+     */
     template <typename NAME>
     void logEvent(const NAME& event_name) {
         char mem[BLYNK_MAX_SENDBYTES];
@@ -268,6 +281,12 @@ public:
         static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_EVENT_LOG, 0, cmd.getBuffer(), cmd.getLength()-1);
     }
 
+    /**
+     * Logs a device event
+     *
+     * @param event_name    Event name
+     * @param description   Event description
+     */
     template <typename NAME, typename DESCR>
     void logEvent(const NAME& event_name, const DESCR& description) {
         char mem[BLYNK_MAX_SENDBYTES];
@@ -277,6 +296,11 @@ public:
         static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_EVENT_LOG, 0, cmd.getBuffer(), cmd.getLength()-1);
     }
 
+    /**
+     * Resolve the most recent device event with a given name
+     *
+     * @param event_name    Event name
+     */
     template <typename NAME>
     void resolveEvent(const NAME& event_name) {
         char mem[BLYNK_MAX_SENDBYTES];
@@ -285,6 +309,11 @@ public:
         static_cast<Proto*>(this)->sendCmd(BLYNK_CMD_EVENT_CLEAR, 0, cmd.getBuffer(), cmd.getLength()-1);
     }
 
+    /**
+     * Resolve all device events with a given name
+     *
+     * @param event_name    Event name
+     */
     template <typename NAME>
     void resolveAllEvents(const NAME& event_name) {
         char mem[BLYNK_MAX_SENDBYTES];
@@ -297,21 +326,6 @@ public:
 #if defined(BLYNK_EXPERIMENTAL)
     // Attention!
     // Every function in this section may be changed, removed or renamed.
-
-    /**
-     * Refreshes value of a widget by running
-     * user-defined BLYNK_READ handler of a pin.
-     *
-     * @experimental
-     *
-     * @param pin Virtual Pin number
-     */
-    void refresh(int pin) {
-        if (WidgetReadHandler handler = GetReadHandler(pin)) {
-            BlynkReq req = { 0, BLYNK_SUCCESS, (uint8_t)pin };
-            handler(req);
-        }
-    }
 
     /**
      * Delays for N milliseconds, handling server communication in background.

@@ -24,13 +24,13 @@
  * Professional settings
  ***************************************************/
 // Library version.
-#define BLYNK_VERSION        "1.3.2"
+#define BLYNK_VERSION        "1.3.5"
 
 #define BLYNK_NEW_LIBRARY
 
 // Heartbeat period in seconds.
 #ifndef BLYNK_HEARTBEAT
-#define BLYNK_HEARTBEAT      45
+#define BLYNK_HEARTBEAT      40
 #endif
 
 // Network timeout in milliseconds.

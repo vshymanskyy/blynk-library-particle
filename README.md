@@ -1,20 +1,19 @@
-[![SWUbanner](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner-direct.svg)](https://vshymanskyy.github.io/StandWithUkraine)
 
-# Blynk C++ Library [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Build%20your%20IoT%20App%20in%20minutes,%20right%20on%20your%20smartphone!&url=https://github.com/blynkkk/blynk-library&via=blynk_app&hashtags=IoT,iOS,Android,Arduino,ESP8266,ESP32,RaspberryPi)
+# Blynk C++ Library
 
-[![GitHub version](https://img.shields.io/github/release/blynkkk/blynk-library.svg)](https://github.com/blynkkk/blynk-library/releases/latest)
-[![GitHub download](https://img.shields.io/github/downloads/blynkkk/blynk-library/total.svg)](https://github.com/blynkkk/blynk-library/releases/latest)
-[![GitHub stars](https://img.shields.io/github/stars/blynkkk/blynk-library.svg)](https://github.com/blynkkk/blynk-library/stargazers)
-[![GitHub issues](https://img.shields.io/github/issues/blynkkk/blynk-library.svg)](https://github.com/blynkkk/blynk-library/issues)
-[![Build Status](https://img.shields.io/travis/blynkkk/blynk-library.svg)](https://travis-ci.org/blynkkk/blynk-library)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/blynkkk/blynk-library/blob/master/LICENSE)
+[![GitHub version](https://img.shields.io/github/release/Blynk-Technologies/blynk-library.svg)](https://github.com/Blynk-Technologies/blynk-library/releases/latest)
+[![GitHub download](https://img.shields.io/github/downloads/Blynk-Technologies/blynk-library/total.svg)](https://github.com/Blynk-Technologies/blynk-library/releases/latest)
+[![GitHub issues](https://img.shields.io/github/issues/Blynk-Technologies/blynk-library.svg)](https://github.com/Blynk-Technologies/blynk-library/issues)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Blynk-Technologies/blynk-library/blob/master/LICENSE)
 
-If you like **Blynk** - give it a star, or fork it and contribute! 
-[![GitHub stars](https://img.shields.io/github/stars/blynkkk/blynk-library.svg?style=social&label=Star)](https://github.com/blynkkk/blynk-library/stargazers) 
-[![GitHub forks](https://img.shields.io/github/forks/blynkkk/blynk-library.svg?style=social&label=Fork)](https://github.com/blynkkk/blynk-library/network)
+If you like **Blynk** - give it a star, or fork it and contribute!
+- [![GitHub stars](https://img.shields.io/github/stars/Blynk-Technologies/blynk-library.svg?label=Star)](https://github.com/Blynk-Technologies/blynk-library/stargazers)
+- [![GitHub forks](https://img.shields.io/github/forks/Blynk-Technologies/blynk-library.svg?label=Fork)](https://github.com/Blynk-Technologies/blynk-library/network)
 __________
 
-### Blynk is a unique IoT platform for connecting any hardware to the cloud, designing apps to control them, and managing your deployed products at scale.
+[![SWUbanner](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner-direct.svg)](https://vshymanskyy.github.io/StandWithUkraine)
+
+#### Blynk is a unique IoT platform for connecting any hardware to the cloud, designing apps to control them, and managing your deployed products at scale.
 
 - With Blynk Library you can connect **over 400 hardware models** (including ESP8266, ESP32, NodeMCU, all Arduinos, Raspberry Pi, Particle, Texas Instruments, etc.) to the Blynk Cloud.
 
@@ -26,11 +25,11 @@ __________
 
 ## Downloads
 
-**Blynk [Arduino Library](https://github.com/blynkkk/blynk-library/releases/latest)**
+**Blynk [Arduino Library](https://github.com/Blynk-Technologies/blynk-library/releases/latest)**
 
 **Blynk Mobile App: 
-[<img src="https://cdn.rawgit.com/simple-icons/simple-icons/develop/icons/googleplay.svg" width="18" height="18" /> Google Play](https://play.google.com/store/apps/details?id=cloud.blynk) | 
-[<img src="https://cdn.rawgit.com/simple-icons/simple-icons/develop/icons/apple.svg" width="18" height="18" /> App Store](https://apps.apple.com/us/app/blynk-iot/id1559317868)**
+[<img src="https://cdn.simpleicons.org/googleplay/363636/d1d1d1" width="18" height="18" /> Google Play](https://play.google.com/store/apps/details?id=cloud.blynk) | 
+[<img src="https://cdn.simpleicons.org/apple/363636/d1d1d1" width="18" height="18" /> App Store](https://apps.apple.com/us/app/blynk-iot/id1559317868)**
 
 ## Quickstart: Particle Gen2 / Gen3
 
@@ -55,20 +54,8 @@ __________
 [Instagram](https://www.instagram.com/blynk.iot/) | 
 [LinkedIn](https://www.linkedin.com/company/b-l-y-n-k/)
 
-## Blynk libraries for other platforms
-* [Python, MicroPython](https://github.com/blynkkk/lib-python)
-
-## Libraries by community
-* [Python, MicroPython](https://github.com/vshymanskyy/blynk-library-python)
-* [Particle](https://github.com/vshymanskyy/blynk-library-particle)
-* [Lua, OpenWrt, NodeMCU](https://github.com/vshymanskyy/blynk-library-lua)
-* [OpenWrt packages](https://github.com/vshymanskyy/blynk-library-openwrt)
-* [MBED](https://developer.mbed.org/users/vshymanskyy/code/Blynk/)
-* [Node-RED for Blynk IoT](https://flows.nodered.org/node/node-red-contrib-blynk-iot)
-
 ## Contributing
-We accept contributions from our community: stability bugfixes, new hardware support, or any other improvements.  
-[Here](https://github.com/blynkkk/blynk-library/labels/help%20wanted) is a list of what you could help with.
+We accept contributions from our community: stability bugfixes, new hardware support, or any other improvements.
 
 ### License
 This project is released under The MIT License (MIT)
